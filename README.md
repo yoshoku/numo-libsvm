@@ -37,7 +37,131 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Preparation
+
+In the following examples, we use [red-datasets](https://github.com/red-data-tools/red-datasets) to download dataset.
+
+    $ gem install red-datasets-numo-narray
+
+### Example 1. Cross-validation
+
+We conduct cross validation of support vector classifier on [Iris dataset](https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/multiclass.html#iris).
+
+```ruby
+require 'numo/narray'
+require 'numo/libsvm'
+require 'datasets-numo-narray'
+
+# Download Iris dataset.
+puts 'Download dataset.'
+iris = Datasets::LIBSVM.new('iris').to_narray
+x = iris[true, 1..-1]
+y = iris[true, 0]
+
+# Define parameters of C-SVC with RBF Kernel.
+param = {
+  svm_type: Numo::Libsvm::SvmType::C_SVC,
+  kernel_type: Numo::Libsvm::KernelType::RBF,
+  gamma: 1.0,
+  C: 1
+}
+
+# Perform 5-cross validation.
+puts 'Perform cross validation.'
+n_folds = 5
+predicted = Numo::Libsvm::SVM.cv(x, y, param, n_folds)
+
+# Print mean accuracy.
+mean_accuracy = y.eq(predicted).count.fdiv(y.size)
+puts "Accuracy: %.1f %%" % (100 * mean_accuracy)
+```
+
+Execution result in the following:
+
+```sh
+Download dataset.
+Perform cross validation.
+Accuracy: 96.0 %
+```
+
+### Example 2. Pendigits dataset classification
+
+We first train the support vector classifier with RBF kernel using training [pendigits dataset](https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/multiclass.html#pendigits).
+
+```ruby
+require 'numo/narray'
+require 'numo/libsvm'
+require 'datasets-numo-narray'
+
+# Download pendigits training dataset.
+puts 'Download dataset.'
+pendigits = Datasets::LIBSVM.new('pendigits').to_narray
+x = pendigits[true, 1..-1]
+y = pendigits[true, 0]
+
+# Define parameters of C-SVC with RBF Kernel.
+param = {
+  svm_type: Numo::Libsvm::SvmType::C_SVC,
+  kernel_type: Numo::Libsvm::KernelType::RBF,
+  gamma: 0.0001,
+  C: 10,
+  shrinking: true
+}
+
+# Perform 5-cross validation.
+puts 'Training support vector machine.'
+model = Numo::Libsvm::SVM.train(x, y, param)
+
+# Save parameters and trained model.
+puts 'Save parameters and model with Marshal.'
+File.open('pendigits.dat', 'wb') { |f| f.write(Marshal.dump([param, model])) }
+```
+
+```sh
+$ ruby train.rb
+Download dataset.
+Training support vector machine.
+Save paramters and model with Marshal.
+```
+
+We then predict labels of testing dataset, and evaluate the classifier.
+
+```ruby
+require 'numo/narray'
+require 'numo/libsvm'
+require 'datasets-numo-narray'
+
+# Download pendigits testing dataset.
+puts 'Download dataset.'
+pendigits_test = Datasets::LIBSVM.new('pendigits', note: 'testing').to_narray
+x = pendigits_test[true, 1..-1]
+y = pendigits_test[true, 0]
+
+# Load parameter and model.
+puts 'Load parameter and model.'
+param, model = Marshal.load(File.binread('pendigits.dat'))
+
+# Predict labels.
+puts 'Predict labels.'
+predicted = Numo::Libsvm::SVM.predict(x, param, model)
+
+# Evaluate classification results.
+mean_accuracy = y.eq(predicted).count.fdiv(y.size)
+puts "Accuracy: %.1f %%" % (100 * mean_accuracy)
+```
+
+```sh
+$ ruby test.rb
+Download dataset.
+Load parameter and model.
+Predict labels.
+Accuracy: 98.3 %
+```
+
+### Note
+The hyperparameter of SVM is given with Ruby Hash on Numo::Libsvm.
+The hash key of hyperparameter and its meaning match the struct svm_parameter of LIBSVM.
+The svm_parameter is detailed in [LIBSVM README](https://github.com/cjlin1/libsvm/blob/master/README).
 
 ## Contributing
 
