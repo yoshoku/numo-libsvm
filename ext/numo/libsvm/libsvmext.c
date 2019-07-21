@@ -232,14 +232,14 @@ VALUE predict(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_hash)
 }
 
 /**
- * Calculate confidence score for given samples.
+ * Calculate decision values for given samples.
  *
  * @overload decision_function(x, param, model) -> Numo::DFloat
  *
  * @param x [Numo::DFloat] (shape: [n_samples, n_features]) The samples to calculate the scores.
  * @param param [Hash] The parameters of the trained SVM model.
  * @param model [Hash] The model obtained from the training procedure.
- * @return [Numo::DFloat] (shape: [n_samples, n_classes]) Confidence score for each sample.
+ * @return [Numo::DFloat] (shape: [n_samples, n_classes * (n_classes - 1) / 2]) The decision value of each sample.
  */
 static
 VALUE decision_function(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_hash)
@@ -429,6 +429,7 @@ VALUE load_svm_model(VALUE self, VALUE filename)
 
 /**
  * Save the SVM parameters and model as a text file with LIBSVM format. The saved file can be used with the libsvm tools.
+ * Note that the svm_save_model saves only the parameters necessary for estimation with the trained model.
  *
  * @overload save_svm_model(filename, param, model) -> Boolean
  *
