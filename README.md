@@ -1,10 +1,25 @@
 # Numo::Libsvm
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/numo/libsvm`. To experiment with that code, run `bin/console` for an interactive prompt.
+Numo::Libsvm is a Ruby gem binding to the [LIBSVM](https://github.com/cjlin1/libsvm) library.
+LIBSVM is one of the famous libraries that implemented Support Vector Machines,
+and provides functions for support vector classifier, regression, and distribution estimation.
+Numo::Libsvm makes to use the LIBSVM functions with dataset represented by [Numo::NArray](https://github.com/ruby-numo/numo-narray).
 
-TODO: Delete this and the text above, and describe your gem
+Note: There are other useful Ruby gems binding to LIBSVM:
+[rb-libsvm](https://github.com/febeling/rb-libsvm) by C. Florian Ebeling,
+[libsvm-ruby-swig](https://github.com/tomz/libsvm-ruby-swig) by Tom Zeng,
+and [jrb-libsvm](https://github.com/andreaseger/jrb-libsvm) by Andreas Eger.
 
 ## Installation
+Numo::Libsvm does not bundle LIBSVM unlike rb-libsvm. You need to install LIBSVM in advance along your environment.
+
+macOS:
+
+    $ brew install libsvm
+
+Ubuntu:
+
+    $ sudo apt-get install libsvm-dev
 
 Add this line to your application's Gemfile:
 

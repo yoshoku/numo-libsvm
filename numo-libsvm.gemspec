@@ -11,10 +11,14 @@ Gem::Specification.new do |spec|
   spec.email         = ['yoshoku@outlook.com']
 
   spec.summary       = <<~MSG
-    Write a short summary, because RubyGems requires one.
+    Numo::Libsvm is a Ruby gem binding to the LIBSVM library.
+    Numo::Libsvm makes to use the LIBSVM functions with dataset represented by Numo::NArray.
   MSG
   spec.description   = <<~MSG
-    Write a longer description or delete this line.
+    Numo::Libsvm is a Ruby gem binding to the LIBSVM library.
+    LIBSVM is one of the famous libraries that implemented Support Vector Machines,
+    and provides functions for support vector classifier, regression, and distribution estimation.
+    Numo::Libsvm makes to use the LIBSVM functions with dataset represented by Numo::NArray.
   MSG
   spec.homepage      = 'https://github.com/yoshoku/numo-libsvm'
   spec.license       = 'BSD-3-Clause'
