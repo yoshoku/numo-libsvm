@@ -26,6 +26,10 @@ if RUBY_PLATFORM =~ /mswin|cygwin|mingw/
   end
 end
 
+if RUBY_PLATFORM =~ /linux/
+  $INCFLAGS = "-I/usr/include/libsvm #{$INCFLAGS}"
+end
+
 unless have_header('svm.h')
   puts 'svm.h not found.'
   exit(1)
