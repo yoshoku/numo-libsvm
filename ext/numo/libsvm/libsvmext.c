@@ -5,7 +5,6 @@
 
 VALUE mNumo;
 VALUE mLibsvm;
-VALUE mSvm;
 
 void print_null(const char *s) {}
 
@@ -458,25 +457,28 @@ void Init_libsvmext()
 {
   rb_require("numo/narray");
 
+  /**
+   * Document-module: Numo
+   * Numo is the top level namespace of NUmerical MOdules for Ruby.
+   */
   mNumo = rb_define_module("Numo");
+
+  /**
+   * Document-module: Numo::Libsvm
+   * Numo::Libsvm is a binding library for LIBSVM that handles dataset with Numo::NArray.
+   */
   mLibsvm = rb_define_module_under(mNumo, "Libsvm");
 
   /* The version of LIBSVM used in backgroud library. */
   rb_define_const(mLibsvm, "LIBSVM_VERSION", INT2NUM(LIBSVM_VERSION));
 
-  /**
-   * Document-module: Numo::Libsvm::SVM
-   * SVM is a module that provides learning and prediction functions of LIBSVM.
-   */
-  mSvm = rb_define_module_under(mLibsvm, "SVM");
-
-  rb_define_module_function(mSvm, "train", train, 3);
-  rb_define_module_function(mSvm, "cv", cross_validation, 4);
-  rb_define_module_function(mSvm, "predict", predict, 3);
-  rb_define_module_function(mSvm, "decision_function", decision_function, 3);
-  rb_define_module_function(mSvm, "predict_proba", predict_proba, 3);
-  rb_define_module_function(mSvm, "load_svm_model", load_svm_model, 1);
-  rb_define_module_function(mSvm, "save_svm_model", save_svm_model, 3);
+  rb_define_module_function(mLibsvm, "train", train, 3);
+  rb_define_module_function(mLibsvm, "cv", cross_validation, 4);
+  rb_define_module_function(mLibsvm, "predict", predict, 3);
+  rb_define_module_function(mLibsvm, "decision_function", decision_function, 3);
+  rb_define_module_function(mLibsvm, "predict_proba", predict_proba, 3);
+  rb_define_module_function(mLibsvm, "load_svm_model", load_svm_model, 1);
+  rb_define_module_function(mLibsvm, "save_svm_model", save_svm_model, 3);
 
   rb_init_svm_type_module();
   rb_init_kernel_type_module();

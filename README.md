@@ -69,7 +69,7 @@ param = {
 # Perform 5-cross validation.
 puts 'Perform cross validation.'
 n_folds = 5
-predicted = Numo::Libsvm::SVM.cv(x, y, param, n_folds)
+predicted = Numo::Libsvm.cv(x, y, param, n_folds)
 
 # Print mean accuracy.
 mean_accuracy = y.eq(predicted).count.fdiv(y.size)
@@ -110,7 +110,7 @@ param = {
 
 # Perform 5-cross validation.
 puts 'Training support vector machine.'
-model = Numo::Libsvm::SVM.train(x, y, param)
+model = Numo::Libsvm.train(x, y, param)
 
 # Save parameters and trained model.
 puts 'Save parameters and model with Marshal.'
@@ -143,7 +143,7 @@ param, model = Marshal.load(File.binread('pendigits.dat'))
 
 # Predict labels.
 puts 'Predict labels.'
-predicted = Numo::Libsvm::SVM.predict(x, param, model)
+predicted = Numo::Libsvm.predict(x, param, model)
 
 # Evaluate classification results.
 mean_accuracy = y.eq(predicted).count.fdiv(y.size)
