@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'bundler/setup'
+require 'tempfile'
+require 'numo/narray'
 require 'numo/libsvm'
 
 RSpec.configure do |config|
