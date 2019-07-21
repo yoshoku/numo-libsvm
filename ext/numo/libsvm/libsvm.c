@@ -5,7 +5,7 @@
 
 VALUE mNumo;
 VALUE mLibsvm;
-VALUE cSvm;
+VALUE mSvm;
 
 void print_null(const char *s) {}
 
@@ -469,18 +469,18 @@ void Init_libsvm()
   rb_define_const(mLibsvm, "LIBSVM_VERSION", INT2NUM(LIBSVM_VERSION));
 
   /**
-   * Document-class: Numo::Libsvm::SVM
-   * SVM is a class that provides learning and prediction functions of LIBSVM.
+   * Document-module: Numo::Libsvm::SVM
+   * SVM is a module that provides learning and prediction functions of LIBSVM.
    */
-  cSvm = rb_define_class_under(mLibsvm, "SVM", rb_cObject);
+  mSvm = rb_define_module_under(mLibsvm, "SVM");
 
-  rb_define_method(cSvm, "train", train, 3);
-  rb_define_method(cSvm, "cv", cross_validation, 4);
-  rb_define_method(cSvm, "predict", predict, 3);
-  rb_define_method(cSvm, "decision_function", decision_function, 3);
-  rb_define_method(cSvm, "predict_proba", predict_proba, 3);
-  rb_define_method(cSvm, "load_svm_model", load_svm_model, 1);
-  rb_define_method(cSvm, "save_svm_model", save_svm_model, 3);
+  rb_define_module_function(mSvm, "train", train, 3);
+  rb_define_module_function(mSvm, "cv", cross_validation, 4);
+  rb_define_module_function(mSvm, "predict", predict, 3);
+  rb_define_module_function(mSvm, "decision_function", decision_function, 3);
+  rb_define_module_function(mSvm, "predict_proba", predict_proba, 3);
+  rb_define_module_function(mSvm, "load_svm_model", load_svm_model, 1);
+  rb_define_module_function(mSvm, "save_svm_model", save_svm_model, 3);
 
   rb_init_svm_type_module();
   rb_init_kernel_type_module();
