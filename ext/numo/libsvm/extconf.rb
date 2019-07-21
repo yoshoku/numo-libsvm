@@ -36,4 +36,4 @@ unless have_library('svm')
   exit(1)
 end
 
-create_makefile('numo/libsvm')
+create_makefile('numo/libsvm/libsvm')
