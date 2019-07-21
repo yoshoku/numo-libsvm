@@ -7,7 +7,7 @@ require 'rake/extensiontask'
 
 task :build => :compile
 
-Rake::ExtensionTask.new('libsvm') do |ext|
+Rake::ExtensionTask.new('libsvmext') do |ext|
   ext.ext_dir = 'ext/numo/libsvm'
   ext.lib_dir = 'lib/numo/libsvm'
 end

@@ -1,7 +1,7 @@
 /**
  * LIBSVM interface for Numo::NArray
  */
-#include "libsvm.h"
+#include "libsvmext.h"
 
 VALUE mNumo;
 VALUE mLibsvm;
@@ -25,7 +25,6 @@ VALUE train(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash)
   struct svm_problem* problem;
   struct svm_parameter* param;
   narray_t* x_nary;
-  narray_t* y_nary;
   double* x_pt;
   double* y_pt;
   int i, j;
@@ -48,7 +47,6 @@ VALUE train(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash)
     y_val = nary_dup(y_val);
   }
   GetNArray(x_val, x_nary);
-  GetNArray(y_val, y_nary);
   param = rb_hash_to_svm_parameter(param_hash);
 
   /* Initialize some variables. */
@@ -107,7 +105,6 @@ VALUE cross_validation(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash, V
   struct svm_problem* problem;
   struct svm_parameter* param;
   narray_t* x_nary;
-  narray_t* y_nary;
   double* x_pt;
   double* y_pt;
   int i, j;
@@ -131,7 +128,6 @@ VALUE cross_validation(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash, V
     y_val = nary_dup(y_val);
   }
   GetNArray(x_val, x_nary);
-  GetNArray(y_val, y_nary);
   param = rb_hash_to_svm_parameter(param_hash);
 
   /* Initialize some variables. */
@@ -458,7 +454,7 @@ VALUE save_svm_model(VALUE self, VALUE filename, VALUE param_hash, VALUE model_h
   return res < 0 ? Qfalse : Qtrue;
 }
 
-void Init_libsvm()
+void Init_libsvmext()
 {
   rb_require("numo/narray");
 

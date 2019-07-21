@@ -1,5 +1,5 @@
-#ifndef NUMO_LIBSVM_H
-#define NUMO_LIBSVM_H 1
+#ifndef NUMO_LIBSVMEXT_H
+#define NUMO_LIBSVMEXT_H 1
 
 #include <math.h>
 #include <string.h>
@@ -14,4 +14,4 @@
 #include "svm_type.h"
 #include "kernel_type.h"
 
-#endif /* NUMO_LIBSVM_H */
+#endif /* NUMO_LIBSVMEXT_H */

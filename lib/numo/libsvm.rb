@@ -2,7 +2,7 @@
 
 require 'numo/narray'
 require 'numo/libsvm/version'
-require 'numo/libsvm/libsvm'
+require 'numo/libsvm/libsvmext'
 
 # Numo is the top level namespace of NUmerical MOdules for Ruby.
 module Numo
