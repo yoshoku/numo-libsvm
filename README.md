@@ -112,8 +112,8 @@ param = {
   shrinking: true
 }
 
-# Perform 5-cross validation.
-puts 'Training support vector machine.'
+# Perform training procedure.
+puts 'Train support vector machine.'
 model = Numo::Libsvm.train(x, y, param)
 
 # Save parameters and trained model.
@@ -124,7 +124,7 @@ File.open('pendigits.dat', 'wb') { |f| f.write(Marshal.dump([param, model])) }
 ```sh
 $ ruby train.rb
 Download dataset.
-Training support vector machine.
+Train support vector machine.
 Save paramters and model with Marshal.
 ```
 
