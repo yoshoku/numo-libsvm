@@ -168,6 +168,32 @@ The hyperparameter of SVM is given with Ruby Hash on Numo::Libsvm.
 The hash key of hyperparameter and its meaning match the struct svm_parameter of LIBSVM.
 The svm_parameter is detailed in [LIBSVM README](https://github.com/cjlin1/libsvm/blob/master/README).
 
+```ruby
+param = {
+  svm_type:                         # [Integer] Type of SVM
+    Numo::Libsvm::SvmType::C_SVC,
+  # for kernel function
+  kernel_type:                      # [Integer] Type of kernel function
+    Numo::Libsvm::KernelType::RBF,
+  degree: 3,                        # [Integer] Degree in polynomial kernel function
+  gamma: 0.5,                       # [Float] Gamma in poly/rbf/sigmoid kernel function
+  coef0: 1.0,                       # [Float] Coefficient in poly/sigmoid kernel function
+  # for training procedure
+  cache_size: 100,                  # [Float] Cache memory size in MB
+  eps: 1e-3,                        # [Float] Tolerance of termination criterion
+  C: 1.0,                           # [Float] Parameter C of C-SVC, epsilon-SVR, and nu-SVR
+  nr_weight: 3,                     # [Integer] Number of weights for C-SVC
+  weight_label:                     # [Numo::Int32] Labels to add weight in C-SVC
+    Numo::Int32[0, 1, 2],
+  weight:                           # [Numo::DFloat] Weight values in C-SVC
+    Numo::DFloat[0.4, 0.4, 0.2],
+  nu: 0.5,                          # [Float] Parameter nu of nu-SVC, one-class SVM, and nu-SVR
+  p: 0.1,                           # [Float] Parameter epsilon in loss function of epsilon-SVR
+  shrinking: true,                  # [Boolean] Whether to use the shrinking heuristics
+  probability: false                # [Boolean] Whether to train a SVC or SVR model for probability estimates
+}
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/yoshoku/numo-libsvm. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
