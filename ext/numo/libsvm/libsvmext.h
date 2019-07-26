@@ -11,6 +11,7 @@
 #include "converter.h"
 #include "svm_parameter.h"
 #include "svm_model.h"
+#include "svm_problem.h"
 #include "svm_type.h"
 #include "kernel_type.h"
 
