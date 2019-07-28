@@ -111,4 +111,38 @@ RSpec.describe Numo::Libsvm do
       expect(r2_score(y, pr)).to be >= 0.1
     end
   end
+
+  describe 'distribution estimation' do
+    let(:dataset) { Marshal.load(File.read(__dir__ + '/../diabetes.dat')) }
+    let(:pos_id) { dataset[1].eq(1).where }
+    let(:neg_id) { dataset[1].ne(1).where }
+    let(:x_pos) { dataset[0][pos_id, true] }
+    let(:y_pos) { dataset[1][pos_id] }
+    let(:x_neg) { dataset[0][neg_id, true] }
+    let(:y_neg) { dataset[1][neg_id] }
+    let(:n_test_samples) { x_neg.shape[0] }
+    let(:oc_svm_model) { Numo::Libsvm.train(x_pos, y_pos, oc_svm_param) }
+    let(:oc_svm_param) do
+      { svm_type: Numo::Libsvm::SvmType::ONE_CLASS,
+        kernel_type: Numo::Libsvm::KernelType::RBF,
+        gamma: 1.0,
+        nu: 0.5 }
+    end
+
+    it 'calculates decision function with one-class SVM' do
+      df = Numo::Libsvm.decision_function(x_neg, oc_svm_param, oc_svm_model)
+      expect(df.class).to eq(Numo::DFloat)
+      expect(df.shape[0]).to eq(n_test_samples)
+      expect(df.shape[1]).to be_nil
+      expect(df.lt(0.0).count).to eq(n_test_samples)
+    end
+
+    it 'predicts labels with one-class SVM' do
+      pr = Numo::Libsvm.predict(x_neg, oc_svm_param, oc_svm_model)
+      expect(pr.class).to eq(Numo::DFloat)
+      expect(pr.shape[0]).to eq(n_test_samples)
+      expect(pr.shape[1]).to be_nil
+      expect(accuracy(y_neg, pr)).to be >= 0.9
+    end
+  end
 end
