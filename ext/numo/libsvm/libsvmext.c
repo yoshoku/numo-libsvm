@@ -12,10 +12,10 @@ void print_null(const char *s) {}
  * Train the SVM model according to the given training data.
  *
  * @overload train(x, y, param) -> Hash
+ *   @param x [Numo::DFloat] (shape: [n_samples, n_features]) The samples to be used for training the model.
+ *   @param y [Numo::DFloat] (shape: [n_samples]) The labels or target values for samples.
+ *   @param param [Hash] The parameters of an SVM model.
  *
- * @param x [Numo::DFloat] (shape: [n_samples, n_features]) The samples to be used for training the model.
- * @param y [Numo::DFloat] (shape: [n_samples]) The labels or target values for samples.
- * @param param [Hash] The parameters of an SVM model.
  * @return [Hash] The model obtained from the training procedure.
  */
 static
@@ -67,11 +67,11 @@ VALUE train(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash)
  * The predicted labels or values in the validation process are returned.
  *
  * @overload cv(x, y, param, n_folds) -> Numo::DFloat
+ *   @param x [Numo::DFloat] (shape: [n_samples, n_features]) The samples to be used for training the model.
+ *   @param y [Numo::DFloat] (shape: [n_samples]) The labels or target values for samples.
+ *   @param param [Hash] The parameters of an SVM model.
+ *   @param n_folds [Integer] The number of folds.
  *
- * @param x [Numo::DFloat] (shape: [n_samples, n_features]) The samples to be used for training the model.
- * @param y [Numo::DFloat] (shape: [n_samples]) The labels or target values for samples.
- * @param param [Hash] The parameters of an SVM model.
- * @param n_folds [Integer] The number of folds.
  * @return [Numo::DFloat] (shape: [n_samples]) The predicted class label or value of each sample.
  */
 static
@@ -126,10 +126,10 @@ VALUE cross_validation(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash, V
  * Predict class labels or values for given samples.
  *
  * @overload predict(x, param, model) -> Numo::DFloat
+ *   @param x [Numo::DFloat] (shape: [n_samples, n_features]) The samples to calculate the scores.
+ *   @param param [Hash] The parameters of the trained SVM model.
+ *   @param model [Hash] The model obtained from the training procedure.
  *
- * @param x [Numo::DFloat] (shape: [n_samples, n_features]) The samples to calculate the scores.
- * @param param [Hash] The parameters of the trained SVM model.
- * @param model [Hash] The model obtained from the training procedure.
  * @return [Numo::DFloat] (shape: [n_samples]) The predicted class label or value of each sample.
  */
 static
@@ -190,10 +190,10 @@ VALUE predict(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_hash)
  * Calculate decision values for given samples.
  *
  * @overload decision_function(x, param, model) -> Numo::DFloat
+ *   @param x [Numo::DFloat] (shape: [n_samples, n_features]) The samples to calculate the scores.
+ *   @param param [Hash] The parameters of the trained SVM model.
+ *   @param model [Hash] The model obtained from the training procedure.
  *
- * @param x [Numo::DFloat] (shape: [n_samples, n_features]) The samples to calculate the scores.
- * @param param [Hash] The parameters of the trained SVM model.
- * @param model [Hash] The model obtained from the training procedure.
  * @return [Numo::DFloat] (shape: [n_samples, n_classes * (n_classes - 1) / 2]) The decision value of each sample.
  */
 static
@@ -286,10 +286,10 @@ VALUE decision_function(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_h
  * The parameter ':probability' set to 1 in training procedure.
  *
  * @overload predict_proba(x, param, model) -> Numo::DFloat
+ *   @param x [Numo::DFloat] (shape: [n_samples, n_features]) The samples to predict the class probabilities.
+ *   @param param [Hash] The parameters of the trained SVM model.
+ *   @param model [Hash] The model obtained from the training procedure.
  *
- * @param x [Numo::DFloat] (shape: [n_samples, n_features]) The samples to predict the class probabilities.
- * @param param [Hash] The parameters of the trained SVM model.
- * @param model [Hash] The model obtained from the training procedure.
  * @return [Numo::DFloat] (shape: [n_samples, n_classes]) Predicted probablity of each class per sample.
  */
 static
@@ -393,10 +393,10 @@ VALUE load_svm_model(VALUE self, VALUE filename)
  * Note that the svm_save_model saves only the parameters necessary for estimation with the trained model.
  *
  * @overload save_svm_model(filename, param, model) -> Boolean
+ *   @param filename [String] The path to a file to save.
+ *   @param param [Hash] The parameters of the trained SVM model.
+ *   @param model [Hash] The model obtained from the training procedure.
  *
- * @param filename [String] The path to a file to save.
- * @param param [Hash] The parameters of the trained SVM model.
- * @param model [Hash] The model obtained from the training procedure.
  * @return [Boolean] true on success, or false if an error occurs.
  */
 static
