@@ -365,10 +365,16 @@ VALUE predict_proba(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_hash)
 static
 VALUE load_svm_model(VALUE self, VALUE filename)
 {
-  struct svm_model* model = svm_load_model(StringValuePtr(filename));
+  char* filename_ = StringValuePtr(filename);
+  struct svm_model* model = svm_load_model(filename_);
   VALUE res = rb_ary_new2(2);
   VALUE param_hash = Qnil;
   VALUE model_hash = Qnil;
+
+  if (model == NULL) {
+    rb_raise(rb_eIOError, "Failed to load file '%s'", filename_);
+    return Qnil;
+  }
 
   if (model) {
     param_hash = svm_parameter_to_rb_hash(&(model->param));
@@ -396,17 +402,23 @@ VALUE load_svm_model(VALUE self, VALUE filename)
 static
 VALUE save_svm_model(VALUE self, VALUE filename, VALUE param_hash, VALUE model_hash)
 {
+  char* filename_ = StringValuePtr(filename);
   struct svm_parameter* param = rb_hash_to_svm_parameter(param_hash);
   struct svm_model* model = rb_hash_to_svm_model(model_hash);
   int res;
 
   model->param = *param;
-  res = svm_save_model(StringValuePtr(filename), model);
+  res = svm_save_model(filename_, model);
 
   xfree_svm_model(model);
   xfree_svm_parameter(param);
 
-  return res < 0 ? Qfalse : Qtrue;
+  if (res < 0) {
+    rb_raise(rb_eIOError, "Failed to save file '%s'", filename_);
+    return Qfalse;
+  }
+
+  return Qtrue;
 }
 
 void Init_libsvmext()
