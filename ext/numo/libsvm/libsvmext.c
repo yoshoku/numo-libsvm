@@ -24,6 +24,7 @@ VALUE train(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash)
   struct svm_problem* problem;
   struct svm_parameter* param;
   struct svm_model* model;
+  char* err_msg;
   VALUE model_hash;
 
   if (CLASS_OF(x_val) != numo_cDFloat) {
@@ -41,6 +42,14 @@ VALUE train(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash)
 
   param = rb_hash_to_svm_parameter(param_hash);
   problem = dataset_to_svm_problem(x_val, y_val);
+
+  err_msg = svm_check_parameter(problem, param);
+  if (err_msg) {
+    xfree_svm_problem(problem);
+    xfree_svm_parameter(param);
+    rb_raise(rb_eArgError, "Invalid LIBSVM parameter is given: %s", err_msg);
+    return Qnil;
+  }
 
   svm_set_print_string_function(print_null);
   model = svm_train(problem, param);
@@ -72,6 +81,7 @@ VALUE cross_validation(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash, V
   size_t t_shape[1];
   VALUE t_val;
   double* t_pt;
+  char* err_msg;
   struct svm_problem* problem;
   struct svm_parameter* param;
 
@@ -90,6 +100,14 @@ VALUE cross_validation(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash, V
 
   param = rb_hash_to_svm_parameter(param_hash);
   problem = dataset_to_svm_problem(x_val, y_val);
+
+  err_msg = svm_check_parameter(problem, param);
+  if (err_msg) {
+    xfree_svm_problem(problem);
+    xfree_svm_parameter(param);
+    rb_raise(rb_eArgError, "Invalid LIBSVM parameter is given: %s", err_msg);
+    return Qnil;
+  }
 
   t_shape[0] = problem->l;
   t_val = rb_narray_new(numo_cDFloat, 1, t_shape);
