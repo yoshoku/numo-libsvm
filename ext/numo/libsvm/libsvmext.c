@@ -24,6 +24,8 @@ VALUE train(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash)
   struct svm_problem* problem;
   struct svm_parameter* param;
   struct svm_model* model;
+  narray_t* x_nary;
+  narray_t* y_nary;
   char* err_msg;
   VALUE model_hash;
 
@@ -38,6 +40,21 @@ VALUE train(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash)
   }
   if (!RTEST(nary_check_contiguous(y_val))) {
     y_val = nary_dup(y_val);
+  }
+
+  GetNArray(x_val, x_nary);
+  GetNArray(y_val, y_nary);
+  if (NA_NDIM(x_nary) != 2) {
+    rb_raise(rb_eArgError, "Expect samples to be 2-D array.");
+    return Qnil;
+  }
+  if (NA_NDIM(y_nary) != 1) {
+    rb_raise(rb_eArgError, "Expect label or target values to be 1-D arrray.");
+    return Qnil;
+  }
+  if (NA_SHAPE(x_nary)[0] != NA_SHAPE(y_nary)[0]) {
+    rb_raise(rb_eArgError, "Expect to have the same number of samples for samples and labels.");
+    return Qnil;
   }
 
   param = rb_hash_to_svm_parameter(param_hash);
@@ -81,6 +98,8 @@ VALUE cross_validation(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash, V
   size_t t_shape[1];
   VALUE t_val;
   double* t_pt;
+  narray_t* x_nary;
+  narray_t* y_nary;
   char* err_msg;
   struct svm_problem* problem;
   struct svm_parameter* param;
@@ -96,6 +115,21 @@ VALUE cross_validation(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash, V
   }
   if (!RTEST(nary_check_contiguous(y_val))) {
     y_val = nary_dup(y_val);
+  }
+
+  GetNArray(x_val, x_nary);
+  GetNArray(y_val, y_nary);
+  if (NA_NDIM(x_nary) != 2) {
+    rb_raise(rb_eArgError, "Expect samples to be 2-D array.");
+    return Qnil;
+  }
+  if (NA_NDIM(y_nary) != 1) {
+    rb_raise(rb_eArgError, "Expect label or target values to be 1-D arrray.");
+    return Qnil;
+  }
+  if (NA_SHAPE(x_nary)[0] != NA_SHAPE(y_nary)[0]) {
+    rb_raise(rb_eArgError, "Expect to have the same number of samples for samples and labels.");
+    return Qnil;
   }
 
   param = rb_hash_to_svm_parameter(param_hash);
@@ -154,7 +188,13 @@ VALUE predict(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_hash)
   if (!RTEST(nary_check_contiguous(x_val))) {
     x_val = nary_dup(x_val);
   }
+
   GetNArray(x_val, x_nary);
+  if (NA_NDIM(x_nary) != 2) {
+    rb_raise(rb_eArgError, "Expect samples to be 2-D array.");
+    return Qnil;
+  }
+
   param = rb_hash_to_svm_parameter(param_hash);
   model = rb_hash_to_svm_model(model_hash);
   model->param = *param;
@@ -220,7 +260,13 @@ VALUE decision_function(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_h
   if (!RTEST(nary_check_contiguous(x_val))) {
     x_val = nary_dup(x_val);
   }
+
   GetNArray(x_val, x_nary);
+  if (NA_NDIM(x_nary) != 2) {
+    rb_raise(rb_eArgError, "Expect samples to be 2-D array.");
+    return Qnil;
+  }
+
   param = rb_hash_to_svm_parameter(param_hash);
   model = rb_hash_to_svm_model(model_hash);
   model->param = *param;
@@ -308,6 +354,12 @@ VALUE predict_proba(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_hash)
   int n_samples;
   int n_features;
 
+  GetNArray(x_val, x_nary);
+  if (NA_NDIM(x_nary) != 2) {
+    rb_raise(rb_eArgError, "Expect samples to be 2-D array.");
+    return Qnil;
+  }
+
   param = rb_hash_to_svm_parameter(param_hash);
   model = rb_hash_to_svm_model(model_hash);
   model->param = *param;
@@ -320,7 +372,6 @@ VALUE predict_proba(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_hash)
     if (!RTEST(nary_check_contiguous(x_val))) {
       x_val = nary_dup(x_val);
     }
-    GetNArray(x_val, x_nary);
 
     /* Initialize some variables. */
     n_samples = (int)NA_SHAPE(x_nary)[0];
