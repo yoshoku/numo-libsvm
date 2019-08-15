@@ -16,6 +16,9 @@ void print_null(const char *s) {}
  *   @param y [Numo::DFloat] (shape: [n_samples]) The labels or target values for samples.
  *   @param param [Hash] The parameters of an SVM model.
  *
+ * @raise [ArgumentError] If the sample array is not 2-dimensional, the label array is not 1-dimensional,
+ *   the sample array and label array do not have the same number of samples, or
+ *   the hyperparameter has an invalid value, this error is raised.
  * @return [Hash] The model obtained from the training procedure.
  */
 static
@@ -89,6 +92,9 @@ VALUE train(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash)
  *   @param param [Hash] The parameters of an SVM model.
  *   @param n_folds [Integer] The number of folds.
  *
+ * @raise [ArgumentError] If the sample array is not 2-dimensional, the label array is not 1-dimensional,
+ *   the sample array and label array do not have the same number of samples, or
+ *   the hyperparameter has an invalid value, this error is raised.
  * @return [Numo::DFloat] (shape: [n_samples]) The predicted class label or value of each sample.
  */
 static
@@ -164,6 +170,7 @@ VALUE cross_validation(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash, V
  *   @param param [Hash] The parameters of the trained SVM model.
  *   @param model [Hash] The model obtained from the training procedure.
  *
+ * @raise [ArgumentError] If the sample array is not 2-dimensional, this error is raised.
  * @return [Numo::DFloat] (shape: [n_samples]) The predicted class label or value of each sample.
  */
 static
@@ -234,6 +241,7 @@ VALUE predict(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_hash)
  *   @param param [Hash] The parameters of the trained SVM model.
  *   @param model [Hash] The model obtained from the training procedure.
  *
+ * @raise [ArgumentError] If the sample array is not 2-dimensional, this error is raised.
  * @return [Numo::DFloat] (shape: [n_samples, n_classes * (n_classes - 1) / 2]) The decision value of each sample.
  */
 static
@@ -336,6 +344,7 @@ VALUE decision_function(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_h
  *   @param param [Hash] The parameters of the trained SVM model.
  *   @param model [Hash] The model obtained from the training procedure.
  *
+ * @raise [ArgumentError] If the sample array is not 2-dimensional, this error is raised.
  * @return [Numo::DFloat] (shape: [n_samples, n_classes]) Predicted probablity of each class per sample.
  */
 static
@@ -411,6 +420,7 @@ VALUE predict_proba(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_hash)
  * Load the SVM parameters and model from a text file with LIBSVM format.
  *
  * @param filename [String] The path to a file to load.
+ * @raise [IOError] This error raises when failed to load the model file.
  * @return [Array] Array contains the SVM parameters and model.
  */
 static
@@ -448,6 +458,7 @@ VALUE load_svm_model(VALUE self, VALUE filename)
  *   @param param [Hash] The parameters of the trained SVM model.
  *   @param model [Hash] The model obtained from the training procedure.
  *
+ * @raise [IOError] This error raises when failed to save the model file.
  * @return [Boolean] true on success, or false if an error occurs.
  */
 static
