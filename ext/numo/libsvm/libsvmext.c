@@ -16,6 +16,30 @@ void print_null(const char *s) {}
  *   @param y [Numo::DFloat] (shape: [n_samples]) The labels or target values for samples.
  *   @param param [Hash] The parameters of an SVM model.
  *
+ * @example
+ *   require 'numo/libsvm'
+ *
+ *   # Prepare XOR data.
+ *   x = Numo::DFloat[[-0.8, -0.7], [0.9, 0.8], [-0.7, 0.9], [0.8, -0.9]]
+ *   y = Numo::Int32[-1, -1, 1, 1]
+ *
+ *   # Train C-Support Vector Classifier with RBF kernel.
+ *   param = {
+ *     svm_type: Numo::Libsvm::SvmType::C_SVC,
+ *     kernel_type: Numo::Libsvm::KernelType::RBF,
+ *     gamma: 2.0,
+ *     C: 1,
+ *     random_seed: 1
+ *   }
+ *   model = Numo::Libsvm.train(x, y, param)
+ *
+ *   # Predict labels of test data.
+ *   x_test = Numo::DFloat[[-0.4, -0.5], [0.5, -0.4]]
+ *   result = Numo::Libsvm.predict(x_test, param, model)
+ *   p result
+ *   # Numo::DFloat#shape=[2]
+ *   # [-1, 1]
+ *
  * @raise [ArgumentError] If the sample array is not 2-dimensional, the label array is not 1-dimensional,
  *   the sample array and label array do not have the same number of samples, or
  *   the hyperparameter has an invalid value, this error is raised.
