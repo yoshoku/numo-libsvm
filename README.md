@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/yoshoku/numo-libsvm.svg?branch=master)](https://travis-ci.org/yoshoku/numo-libsvm)
 [![Gem Version](https://badge.fury.io/rb/numo-libsvm.svg)](https://badge.fury.io/rb/numo-libsvm)
 [![BSD 3-Clause License](https://img.shields.io/badge/License-BSD%203--Clause-orange.svg)](https://github.com/yoshoku/numo-libsvm/blob/master/LICENSE.txt)
-[![Documentation](http://img.shields.io/badge/docs-rdoc.info-blue.svg)](https://www.rubydoc.info/gems/numo-libsvm/0.2.0)
+[![Documentation](http://img.shields.io/badge/docs-rdoc.info-blue.svg)](https://www.rubydoc.info/gems/numo-libsvm/0.3.0)
 
 Numo::Libsvm is a Ruby gem binding to the [LIBSVM](https://github.com/cjlin1/libsvm) library.
 LIBSVM is one of the famous libraries that implemented Support Vector Machines,
@@ -172,7 +172,6 @@ The svm_parameter is detailed in [LIBSVM README](https://github.com/cjlin1/libsv
 param = {
   svm_type:                         # [Integer] Type of SVM
     Numo::Libsvm::SvmType::C_SVC,
-  # for kernel function
   kernel_type:                      # [Integer] Type of kernel function
     Numo::Libsvm::KernelType::RBF,
   degree: 3,                        # [Integer] Degree in polynomial kernel function
@@ -190,7 +189,8 @@ param = {
   nu: 0.5,                          # [Float] Parameter nu of nu-SVC, one-class SVM, and nu-SVR
   p: 0.1,                           # [Float] Parameter epsilon in loss function of epsilon-SVR
   shrinking: true,                  # [Boolean] Whether to use the shrinking heuristics
-  probability: false                # [Boolean] Whether to train a SVC or SVR model for probability estimates
+  probability: false,               # [Boolean] Whether to train a SVC or SVR model for probability estimates
+  random_seed: 1                    # [Integer/Nil] Random seed
 }
 ```
 
