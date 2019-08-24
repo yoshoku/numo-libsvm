@@ -55,6 +55,7 @@ VALUE train(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash)
   narray_t* y_nary;
   char* err_msg;
   VALUE random_seed;
+  VALUE verbose;
   VALUE model_hash;
 
   if (CLASS_OF(x_val) != numo_cDFloat) {
@@ -101,7 +102,11 @@ VALUE train(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash)
     return Qnil;
   }
 
-  svm_set_print_string_function(print_null);
+  verbose = rb_hash_aref(param_hash, ID2SYM(rb_intern("verbose")));
+  if (verbose != Qtrue) {
+    svm_set_print_string_function(print_null);
+  }
+
   model = svm_train(problem, param);
   model_hash = svm_model_to_rb_hash(model);
   svm_free_and_destroy_model(&model);
@@ -138,6 +143,7 @@ VALUE cross_validation(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash, V
   narray_t* y_nary;
   char* err_msg;
   VALUE random_seed;
+  VALUE verbose;
   struct svm_problem* problem;
   struct svm_parameter* param;
 
@@ -189,7 +195,11 @@ VALUE cross_validation(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash, V
   t_val = rb_narray_new(numo_cDFloat, 1, t_shape);
   t_pt = (double*)na_get_pointer_for_write(t_val);
 
-  svm_set_print_string_function(print_null);
+  verbose = rb_hash_aref(param_hash, ID2SYM(rb_intern("verbose")));
+  if (verbose != Qtrue) {
+    svm_set_print_string_function(print_null);
+  }
+
   svm_cross_validation(problem, param, n_folds, t_pt);
 
   xfree_svm_problem(problem);
