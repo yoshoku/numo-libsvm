@@ -127,6 +127,30 @@ VALUE train(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash)
  *   @param param [Hash] The parameters of an SVM model.
  *   @param n_folds [Integer] The number of folds.
  *
+ * @example
+ *   require 'numo/libsvm'
+ *
+ *   # x: samples
+ *   # y: labels
+ *
+ *   # Define parameters of C-SVC with RBF Kernel.
+ *   param = {
+ *     svm_type: Numo::Libsvm::SvmType::C_SVC,
+ *     kernel_type: Numo::Libsvm::KernelType::RBF,
+ *     gamma: 1.0,
+ *     C: 1,
+ *     random_seed: 1,
+ *     verbose: true
+ *   }
+ *
+ *   # Perform 5-cross validation.
+ *   n_folds = 5
+ *   res = Numo::Libsvm.cv(x, y, param, n_folds)
+ *
+ *   # Print mean accuracy.
+ *   mean_accuracy = y.eq(res).count.fdiv(y.size)
+ *   puts "Accuracy: %.1f %%" % (100 * mean_accuracy)
+ *
  * @raise [ArgumentError] If the sample array is not 2-dimensional, the label array is not 1-dimensional,
  *   the sample array and label array do not have the same number of samples, or
  *   the hyperparameter has an invalid value, this error is raised.
