@@ -3,6 +3,6 @@
 module Numo
   module Libsvm
     # The version of Numo::Libsvm you are using.
-    VERSION = '0.3.0'
+    VERSION = '0.4.0'
   end
 end
