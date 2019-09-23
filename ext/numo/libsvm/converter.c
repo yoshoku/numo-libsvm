@@ -132,31 +132,65 @@ VALUE svm_nodes_to_nary(struct svm_node** const support_vecs, const int n_suppor
   return v;
 }
 
-struct svm_node** nary_to_svm_nodes(VALUE model_val)
+struct svm_node** nary_to_svm_nodes(VALUE nary_val)
 {
-  int i, j;
-  int n_rows, n_cols;
-  narray_t* model_nary;
-  double* model_pt;
+  int i, j, k;
+  int n_rows, n_cols, n_nonzero_cols;
+  narray_t* nary;
+  double* nary_pt;
   struct svm_node** support_vecs;
 
-  if (model_val == Qnil) return NULL;
+  if (nary_val == Qnil) return NULL;
 
-  GetNArray(model_val, model_nary);
-  n_rows = (int)NA_SHAPE(model_nary)[0];
-  n_cols = (int)NA_SHAPE(model_nary)[1];
+  GetNArray(nary_val, nary);
+  n_rows = (int)NA_SHAPE(nary)[0];
+  n_cols = (int)NA_SHAPE(nary)[1];
 
-  model_pt = (double*)na_get_pointer_for_read(model_val);
+  nary_pt = (double*)na_get_pointer_for_read(nary_val);
   support_vecs = ALLOC_N(struct svm_node*, n_rows);
   for (i = 0; i < n_rows; i++) {
-    support_vecs[i] = ALLOC_N(struct svm_node, n_cols + 1);
+    n_nonzero_cols = 0;
     for (j = 0; j < n_cols; j++) {
-      support_vecs[i][j].index = j + 1;
-      support_vecs[i][j].value = model_pt[i * n_cols + j];
+      if (nary_pt[i * n_cols + j] != 0) {
+        n_nonzero_cols++;
+      }
     }
-    support_vecs[i][n_cols].index = -1;
-    support_vecs[i][n_cols].value = 0.0;
+    support_vecs[i] = ALLOC_N(struct svm_node, n_nonzero_cols + 1);
+    for (j = 0, k = 0; j < n_cols; j++) {
+      if (nary_pt[i * n_cols + j] != 0) {
+        support_vecs[i][k].index = j + 1;
+        support_vecs[i][k].value = nary_pt[i * n_cols + j];
+        k++;
+      }
+    }
+    support_vecs[i][n_nonzero_cols].index = -1;
+    support_vecs[i][n_nonzero_cols].value = 0.0;
   }
 
   return support_vecs;
+}
+
+struct svm_node* dbl_vec_to_svm_node(double* const arr, int const size)
+{
+  int i, j;
+  int n_nonzero_elements;
+  struct svm_node* node;
+
+  n_nonzero_elements = 0;
+  for (i = 0; i < size; i++) {
+    if (arr[i] != 0.0) n_nonzero_elements++;
+  }
+
+  node = ALLOC_N(struct svm_node, n_nonzero_elements + 1);
+  for (i = 0, j = 0; i < size; i++) {
+    if (arr[i] != 0.0) {
+      node[j].index = i + 1;
+      node[j].value = arr[i];
+      j++;
+    }
+  }
+  node[n_nonzero_elements].index = -1;
+  node[n_nonzero_elements].value = 0.0;
+
+  return node;
 }

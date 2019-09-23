@@ -254,9 +254,10 @@ VALUE predict(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_hash)
   size_t y_shape[1];
   VALUE y_val;
   double* y_pt;
-  int i, j;
+  int i, j, k;
   int n_samples;
   int n_features;
+  int n_nonzero_features;
 
   /* Obtain C data structures. */
   if (CLASS_OF(x_val) != numo_cDFloat) {
@@ -285,18 +286,12 @@ VALUE predict(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_hash)
   x_pt = (double*)na_get_pointer_for_read(x_val);
 
   /* Predict values. */
-  x_nodes = ALLOC_N(struct svm_node, n_features + 1);
-  x_nodes[n_features].index = -1;
-  x_nodes[n_features].value = 0.0;
   for (i = 0; i < n_samples; i++) {
-    for (j = 0; j < n_features; j++) {
-      x_nodes[j].index = j + 1;
-      x_nodes[j].value = (double)x_pt[i * n_features + j];
-    }
+    x_nodes = dbl_vec_to_svm_node(&x_pt[i * n_features], n_features);
     y_pt[i] = svm_predict(model, x_nodes);
+    xfree(x_nodes);
   }
 
-  xfree(x_nodes);
   xfree_svm_model(model);
   xfree_svm_parameter(param);
 
@@ -368,34 +363,22 @@ VALUE decision_function(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_h
 
   /* Predict values. */
   if (model->param.svm_type == ONE_CLASS || model->param.svm_type == EPSILON_SVR || model->param.svm_type == NU_SVR) {
-    x_nodes = ALLOC_N(struct svm_node, n_features + 1);
-    x_nodes[n_features].index = -1;
-    x_nodes[n_features].value = 0.0;
     for (i = 0; i < n_samples; i++) {
-      for (j = 0; j < n_features; j++) {
-        x_nodes[j].index = j + 1;
-        x_nodes[j].value = (double)x_pt[i * n_features + j];
-      }
+      x_nodes = dbl_vec_to_svm_node(&x_pt[i * n_features], n_features);
       svm_predict_values(model, x_nodes, &y_pt[i]);
+      xfree(x_nodes);
     }
-    xfree(x_nodes);
   } else {
     y_cols = (int)y_shape[1];
     dec_values = ALLOC_N(double, y_cols);
-    x_nodes = ALLOC_N(struct svm_node, n_features + 1);
-    x_nodes[n_features].index = -1;
-    x_nodes[n_features].value = 0.0;
     for (i = 0; i < n_samples; i++) {
-      for (j = 0; j < n_features; j++) {
-        x_nodes[j].index = j + 1;
-        x_nodes[j].value = (double)x_pt[i * n_features + j];
-      }
+      x_nodes = dbl_vec_to_svm_node(&x_pt[i * n_features], n_features);
       svm_predict_values(model, x_nodes, dec_values);
+      xfree(x_nodes);
       for (j = 0; j < y_cols; j++) {
         y_pt[i * y_cols + j] = dec_values[j];
       }
     }
-    xfree(x_nodes);
     xfree(dec_values);
   }
 
@@ -463,20 +446,14 @@ VALUE predict_proba(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_hash)
 
     /* Predict values. */
     probs = ALLOC_N(double, model->nr_class);
-    x_nodes = ALLOC_N(struct svm_node, n_features + 1);
-    x_nodes[n_features].index = -1;
-    x_nodes[n_features].value = 0.0;
     for (i = 0; i < n_samples; i++) {
-      for (j = 0; j < n_features; j++) {
-        x_nodes[j].index = j + 1;
-        x_nodes[j].value = (double)x_pt[i * n_features + j];
-      }
+      x_nodes = dbl_vec_to_svm_node(&x_pt[i * n_features], n_features);
       svm_predict_probability(model, x_nodes, probs);
+      xfree(x_nodes);
       for (j = 0; j < model->nr_class; j++) {
         y_pt[i * model->nr_class + j] = probs[j];
       }
     }
-    xfree(x_nodes);
     xfree(probs);
   }
 

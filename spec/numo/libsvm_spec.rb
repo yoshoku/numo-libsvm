@@ -69,6 +69,21 @@ RSpec.describe Numo::Libsvm do
       expect(pr.shape[1]).to be_nil
       expect(accuracy(y_test, pr)).to be_within(0.05).of(0.95)
     end
+
+    context 'when given training data  that contain all zero value feature' do
+      let(:n_train_samples) { dataset[0].shape[0] }
+      let(:n_test_samples) { dataset[2].shape[0] }
+      let(:x) { Numo::NArray.hstack([dataset[0], Numo::DFloat.zeros(n_train_samples).expand_dims(1)]) }
+      let(:x_test) { Numo::NArray.hstack([dataset[2], Numo::DFloat.new(n_test_samples).rand.expand_dims(1)]) }
+
+      it 'predicts labels with C-SVC' do
+        pr = Numo::Libsvm.predict(x_test, c_svc_param, c_svc_model)
+        expect(pr.class).to eq(Numo::DFloat)
+        expect(pr.shape[0]).to eq(n_test_samples)
+        expect(pr.shape[1]).to be_nil
+        expect(accuracy(y_test, pr)).to be_within(0.05).of(0.95)
+      end
+    end
   end
 
   describe 'regression' do
