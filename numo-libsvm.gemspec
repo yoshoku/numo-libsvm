@@ -33,6 +33,12 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
   spec.extensions    = ['ext/numo/libsvm/extconf.rb']
 
+  spec.metadata      = {
+    'homepage_uri' => 'https://github.com/yoshoku/numo-libsvm',
+    'source_code_uri' => 'https://github.com/yoshoku/numo-libsvm',
+    'documentation_uri' => 'https://yoshoku.github.io/numo-libsvm/doc/'
+  }
+
   spec.add_runtime_dependency 'numo-narray', '~> 0.9.1'
   spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'rake', '~> 10.0'
