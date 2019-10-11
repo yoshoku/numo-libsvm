@@ -26,18 +26,14 @@ if RUBY_PLATFORM =~ /mswin|cygwin|mingw/
   end
 end
 
-if RUBY_PLATFORM =~ /linux/
-  $INCFLAGS = "-I/usr/include/libsvm #{$INCFLAGS}"
-end
+$LDFLAGS << ' -lstdc++ '
 
-unless have_header('svm.h')
-  puts 'svm.h not found.'
-  exit(1)
-end
-
-unless have_library('svm')
-  puts 'libsvm not found.'
-  exit(1)
+$srcs = Dir.glob("#{$srcdir}/*.c").map { |path| File.basename(path) }
+$srcs << 'svm.cpp'
+Dir.glob("#{$srcdir}/*/") do |path|
+  dir = File.basename(path)
+  $INCFLAGS << " -I$(srcdir)/#{dir}"
+  $VPATH << "$(srcdir)/#{dir}"
 end
 
 create_makefile('numo/libsvm/libsvmext')

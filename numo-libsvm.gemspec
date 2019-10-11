@@ -28,6 +28,13 @@ Gem::Specification.new do |spec|
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   end
+
+  gem_dir = File.expand_path(__dir__) + '/'
+  submodule_path = `git submodule --quiet foreach pwd`.split($OUTPUT_RECORD_SEPARATOR).first
+  submodule_relative_path = submodule_path.sub gem_dir, ''
+  spec.files << "#{submodule_relative_path}/svm.cpp"
+  spec.files << "#{submodule_relative_path}/svm.h"
+
   spec.bindir        = 'exe'
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
@@ -40,6 +47,7 @@ Gem::Specification.new do |spec|
   }
 
   spec.add_runtime_dependency 'numo-narray', '~> 0.9.1'
+
   spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rake-compiler', '~> 1.0'
