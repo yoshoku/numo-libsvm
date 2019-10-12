@@ -16,15 +16,7 @@ Note: There are other useful Ruby gems binding to LIBSVM:
 and [jrb-libsvm](https://github.com/andreaseger/jrb-libsvm) by Andreas Eger.
 
 ## Installation
-Numo::Libsvm does not bundle LIBSVM unlike rb-libsvm. You need to install LIBSVM in advance along your environment.
-
-macOS:
-
-    $ brew install libsvm
-
-Ubuntu:
-
-    $ sudo apt-get install libsvm-dev
+Numo::Libsvm bundles LIBSVM. There is no need to install LIBSVM in advance.
 
 Add this line to your application's Gemfile:
 

@@ -1,3 +1,8 @@
+# 1.0.0
+## Breaking change
+- For easy installation, Numo::LIBSVM bundles LIBSVM codes.
+There is no need to install LIBSVM in advance to use Numo::LIBSVM.
+
 # 0.5.0
 - Fix to use LIBSVM sparce vector representation for internal processing.
 
