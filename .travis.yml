@@ -10,5 +10,4 @@ rvm:
   - '2.6'
 
 before_install:
-  - sudo apt-get install -y libsvm-dev
   - gem install bundler -v 2.0.2
