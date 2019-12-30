@@ -21,6 +21,48 @@ RSpec.describe Numo::Libsvm do
     end
   end
 
+  describe 'precomputed kernel' do
+    let(:dataset) { Marshal.load(File.read(__dir__ + '/../iris.dat')) }
+    let(:x) do
+      k = dataset[0].dot(dataset[0].transpose)
+      idx = Numo::Int32.new(k.shape[0]).seq + 1
+      Numo::NArray.hstack([idx.expand_dims(1), k])
+    end
+    let(:y) { dataset[1] }
+    let(:x_test) do
+      k = dataset[2].dot(dataset[0].transpose)
+      idx = Numo::Int32.new(k.shape[0]).seq + 1
+      Numo::NArray.hstack([idx.expand_dims(1), k])
+    end
+    let(:y_test) { dataset[3] }
+    let(:classes) { Numo::Int32[*y.to_a.uniq] }
+    let(:n_classes) { classes.size }
+    let(:n_test_samples) { x_test.shape[0] }
+    let(:c_svc_model) { Numo::Libsvm.train(x, y, c_svc_param) }
+    let(:c_svc_param) do
+      { svm_type: Numo::Libsvm::SvmType::C_SVC,
+        kernel_type: Numo::Libsvm::KernelType::PRECOMPUTED,
+        gamma: 0.1,
+        coef0: 1,
+        C: 10,
+        shrinking: true,
+        probability: true }
+    end
+
+    it 'performs 5-cross validation with C-SVC' do
+      pr = Numo::Libsvm.cv(x, y, c_svc_param, 5)
+      expect(accuracy(y, pr)).to be_within(0.05).of(0.95)
+    end
+
+    it 'predicts labels with C-SVC' do
+      pr = Numo::Libsvm.predict(x_test, c_svc_param, c_svc_model)
+      expect(pr.class).to eq(Numo::DFloat)
+      expect(pr.shape[0]).to eq(n_test_samples)
+      expect(pr.shape[1]).to be_nil
+      expect(accuracy(y_test, pr)).to be_within(0.05).of(0.95)
+    end
+  end
+
   describe 'classification' do
     let(:dataset) { Marshal.load(File.read(__dir__ + '/../iris.dat')) }
     let(:x) { dataset[0] }
