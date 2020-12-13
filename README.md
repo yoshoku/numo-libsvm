@@ -2,7 +2,7 @@
 
 [![Build Status](https://github.com/yoshoku/numo-libsvm/workflows/build/badge.svg)](https://github.com/yoshoku/numo-libsvm/actions?query=workflow%3Abuild)
 [![Gem Version](https://badge.fury.io/rb/numo-libsvm.svg)](https://badge.fury.io/rb/numo-libsvm)
-[![BSD 3-Clause License](https://img.shields.io/badge/License-BSD%203--Clause-orange.svg)](https://github.com/yoshoku/numo-libsvm/blob/master/LICENSE.txt)
+[![BSD 3-Clause License](https://img.shields.io/badge/License-BSD%203--Clause-orange.svg)](https://github.com/yoshoku/numo-libsvm/blob/main/LICENSE.txt)
 [![Documentation](https://img.shields.io/badge/api-reference-blue.svg)](https://yoshoku.github.io/numo-libsvm/doc/)
 
 Numo::Libsvm is a Ruby gem binding to the [LIBSVM](https://github.com/cjlin1/libsvm) library.
@@ -158,7 +158,7 @@ Accuracy: 98.3 %
 ### Note
 The hyperparameter of SVM is given with Ruby Hash on Numo::Libsvm.
 The hash key of hyperparameter and its meaning match the struct svm_parameter of LIBSVM.
-The svm_parameter is detailed in [LIBSVM README](https://github.com/cjlin1/libsvm/blob/master/README).
+The svm_parameter is detailed in [LIBSVM README](https://github.com/cjlin1/libsvm/blob/main/README).
 
 ```ruby
 param = {
@@ -197,4 +197,4 @@ The gem is available as open source under the terms of the [BSD-3-Clause License
 
 ## Code of Conduct
 
-Everyone interacting in the Numo::Libsvm project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/yoshoku/numo-libsvm/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Numo::Libsvm project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/yoshoku/numo-libsvm/blob/main/CODE_OF_CONDUCT.md).
