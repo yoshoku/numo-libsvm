@@ -1,3 +1,7 @@
+# 1.0.1
+- Add GC guard codes.
+- Fix some configuration files.
+
 # 1.0.0
 ## Breaking change
 - For easy installation, Numo::LIBSVM bundles LIBSVM codes.
