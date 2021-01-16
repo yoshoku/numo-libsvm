@@ -83,5 +83,8 @@ struct svm_problem* dataset_to_svm_problem(VALUE x_val, VALUE y_val)
     problem->y[i] = y_pt[i];
   }
 
+  RB_GC_GUARD(x_val);
+  RB_GC_GUARD(y_val);
+
   return problem;
 }

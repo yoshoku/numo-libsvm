@@ -114,6 +114,9 @@ VALUE train(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash)
   xfree_svm_problem(problem);
   xfree_svm_parameter(param);
 
+  RB_GC_GUARD(x_val);
+  RB_GC_GUARD(y_val);
+
   return model_hash;
 }
 
@@ -229,6 +232,9 @@ VALUE cross_validation(VALUE self, VALUE x_val, VALUE y_val, VALUE param_hash, V
   xfree_svm_problem(problem);
   xfree_svm_parameter(param);
 
+  RB_GC_GUARD(x_val);
+  RB_GC_GUARD(y_val);
+
   return t_val;
 }
 
@@ -294,6 +300,8 @@ VALUE predict(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_hash)
 
   xfree_svm_model(model);
   xfree_svm_parameter(param);
+
+  RB_GC_GUARD(x_val);
 
   return y_val;
 }
@@ -385,6 +393,8 @@ VALUE decision_function(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_h
   xfree_svm_model(model);
   xfree_svm_parameter(param);
 
+  RB_GC_GUARD(x_val);
+
   return y_val;
 }
 
@@ -459,6 +469,8 @@ VALUE predict_proba(VALUE self, VALUE x_val, VALUE param_hash, VALUE model_hash)
 
   xfree_svm_model(model);
   xfree_svm_parameter(param);
+
+  RB_GC_GUARD(x_val);
 
   return y_val;
 }
