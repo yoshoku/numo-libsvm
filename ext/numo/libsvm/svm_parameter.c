@@ -35,13 +35,13 @@ struct svm_parameter* rb_hash_to_svm_parameter(VALUE param_hash)
   param->weight_label = NULL;
   if (!NIL_P(el)) {
     param->weight_label = ALLOC_N(int, param->nr_weight);
-    memcpy(param->weight_label, (int32_t*)na_get_pointer_for_read(el), param->nr_weight);
+    memcpy(param->weight_label, (int32_t*)na_get_pointer_for_read(el), param->nr_weight * sizeof(int32_t));
   }
   el = rb_hash_aref(param_hash, ID2SYM(rb_intern("weight")));
   param->weight       = NULL;
   if (!NIL_P(el)) {
     param->weight = ALLOC_N(double, param->nr_weight);
-    memcpy(param->weight, (double*)na_get_pointer_for_read(el), param->nr_weight);
+    memcpy(param->weight, (double*)na_get_pointer_for_read(el), param->nr_weight * sizeof(double));
   }
   return param;
 }
