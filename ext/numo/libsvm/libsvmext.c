@@ -505,6 +505,8 @@ VALUE load_svm_model(VALUE self, VALUE filename)
   rb_ary_store(res, 0, param_hash);
   rb_ary_store(res, 1, model_hash);
 
+  RB_GC_GUARD(filename);
+
   return res;
 }
 
@@ -538,6 +540,8 @@ VALUE save_svm_model(VALUE self, VALUE filename, VALUE param_hash, VALUE model_h
     rb_raise(rb_eIOError, "Failed to save file '%s'", filename_);
     return Qfalse;
   }
+
+  RB_GC_GUARD(filename);
 
   return Qtrue;
 }
