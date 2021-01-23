@@ -1,3 +1,7 @@
+# 1.0.2
+- Add GC guard to model saving and loading methods.
+- Fix size specification to memcpy function.
+
 # 1.0.1
 - Add GC guard codes.
 - Fix some configuration files.
