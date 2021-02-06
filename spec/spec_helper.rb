@@ -3,6 +3,10 @@
 require 'bundler/setup'
 require 'numo/libsvm'
 
+if defined?(GC.verify_compaction_references) == 'method'
+  GC.verify_compaction_references(double_heap: true, toward: :empty)
+end
+
 def accuracy(y_true, y_pred)
   y_pred.eq(y_true).count.fdiv(y_true.size)
 end
