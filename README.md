@@ -158,7 +158,7 @@ Accuracy: 98.3 %
 ### Note
 The hyperparameter of SVM is given with Ruby Hash on Numo::Libsvm.
 The hash key of hyperparameter and its meaning match the struct svm_parameter of LIBSVM.
-The svm_parameter is detailed in [LIBSVM README](https://github.com/cjlin1/libsvm/blob/main/README).
+The svm_parameter is detailed in [LIBSVM README](https://github.com/cjlin1/libsvm/blob/master/README).
 
 ```ruby
 param = {
