@@ -1,0 +1,65 @@
+module Numo
+  module Libsvm
+    module SvmType
+      C_SVC: Integer
+      NU_SVC: Integer
+      ONE_CLASS: Integer
+      EPSILON_SVR: Integer
+      NU_SVR: Integer
+    end
+
+    module KenelType
+      LINEAR: Integer
+      POLY: Integer
+      RBF: Integer
+      SIGMOID: Integer
+      PRECOMPUTED: Integer
+    end
+
+    LIBSVM_VERSION: Integer
+    VERSION: String
+
+    type model = {
+      nr_class: Integer,
+      l: Integer,
+      SV: Numo::DFloat,
+      sv_coef: Numo::DFloat,
+      rho: Numo::DFloat,
+      probA: Numo::DFloat,
+      probB: Numo::DFloat,
+      sv_indices: Numo::Int32,
+      label: Numo::Int32,
+      nSV: Numo::Int32,
+      free_sv: Integer
+    }
+
+    type param = {
+      svm_type: Integer?,
+      kernel_type: Integer?,
+      degree: Integer?,
+      gamma: Float?,
+      coef0: Float?,
+      cache_size: Float?,
+      eps: Float?,
+      C: Float?,
+      nr_weight: Integer?,
+      weight_label: Numo::Int32?,
+      weight: Numo::DFloat?,
+      nu: Float?,
+      p: Float?,
+      shrinking: bool?,
+      probability: bool?,
+      verbose: bool?,
+      random_seed: Integer?
+    }
+
+    def self?.cv: (Numo::DFloat x, Numo::DFloat y, param, Integer n_folds) -> Numo::DFloat
+    def self?.train: (Numo::DFloat x, Numo::DFloat y, param) -> model
+    def self?.predict: (Numo::DFloat x, param, model) -> Numo::DFloat
+    def self?.predict_proba: (Numo::DFloat x, param, model) -> Numo::DFloat
+    def self?.decision_function: (Numo::DFloat x, param, model) -> Numo::DFloat
+    def self?.save_svm_model: (String filename, param, model) -> bool
+    def self?.load_svm_model: (String filename) -> [param, model]
+  end
+end
+

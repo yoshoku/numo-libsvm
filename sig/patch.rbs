@@ -1,0 +1,8 @@
+module Numo
+  class NArray
+  end
+  class DFloat < NArray
+  end
+  class Int32 < NArray
+  end
+end
