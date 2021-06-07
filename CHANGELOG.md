@@ -1,3 +1,6 @@
+# 1.1.0
+- Add type declaration file: sig/numo/libsvm.rbs
+
 # 1.0.2
 - Add GC guard to model saving and loading methods.
 - Fix size specification to memcpy function.
