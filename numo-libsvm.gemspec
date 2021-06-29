@@ -46,5 +46,5 @@ Gem::Specification.new do |spec|
     'documentation_uri' => 'https://yoshoku.github.io/numo-libsvm/doc/'
   }
 
-  spec.add_runtime_dependency 'numo-narray', '~> 0.9.1'
+  spec.add_runtime_dependency 'numo-narray', '>= 0.9.1'
 end
