@@ -1,3 +1,6 @@
+# 1.1.1
+- Fix version specifier of runtime dependencies.
+
 # 1.1.0
 - Add type declaration file: sig/numo/libsvm.rbs
 
