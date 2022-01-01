@@ -8,10 +8,7 @@ $LOAD_PATH.each do |lp|
   end
 end
 
-unless have_header('numo/narray.h')
-  puts 'numo/narray.h not found.'
-  exit(1)
-end
+abort 'numo/narray.h not found.' unless have_header('numo/narray.h')
 
 if RUBY_PLATFORM =~ /mswin|cygwin|mingw/
   $LOAD_PATH.each do |lp|
@@ -20,20 +17,14 @@ if RUBY_PLATFORM =~ /mswin|cygwin|mingw/
       break
     end
   end
-  unless have_library('narray', 'nary_new')
-    puts 'libnarray.a not found.'
-    exit(1)
-  end
+  abort 'libnarray.a not found.' unless have_library('narray', 'nary_new')
 end
 
-$LDFLAGS << ' -lstdc++ '
+abort 'libstdc++ is not found.' unless have_library('stdc++')
 
 $srcs = Dir.glob("#{$srcdir}/*.c").map { |path| File.basename(path) }
 $srcs << 'svm.cpp'
-Dir.glob("#{$srcdir}/*/") do |path|
-  dir = File.basename(path)
-  $INCFLAGS << " -I$(srcdir)/#{dir}"
-  $VPATH << "$(srcdir)/#{dir}"
-end
+$INCFLAGS << " -I$(srcdir)/src"
+$VPATH << "$(srcdir)/src"
 
 create_makefile('numo/libsvm/libsvmext')
