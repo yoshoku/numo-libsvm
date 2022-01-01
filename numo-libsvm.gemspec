@@ -27,11 +27,6 @@ Gem::Specification.new do |spec|
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features|sig-deps)/}) }
   end
 
-  submodule_path = `git submodule --quiet foreach pwd`.split($INPUT_RECORD_SEPARATOR).first
-  submodule_relative_path = submodule_path.sub("#{File.expand_path(__dir__)}/", '')
-  spec.files << "#{submodule_relative_path}/svm.cpp"
-  spec.files << "#{submodule_relative_path}/svm.h"
-
   spec.bindir        = 'exe'
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
