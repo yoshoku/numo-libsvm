@@ -22,8 +22,7 @@ end
 
 abort 'libstdc++ is not found.' unless have_library('stdc++')
 
-$srcs = Dir.glob("#{$srcdir}/*.c").map { |path| File.basename(path) }
-$srcs << 'svm.cpp'
+$srcs = Dir.glob("#{$srcdir}/**/*.cpp").map { |path| File.basename(path) }
 $INCFLAGS << " -I$(srcdir)/src"
 $VPATH << "$(srcdir)/src"
 
