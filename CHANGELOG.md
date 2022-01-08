@@ -1,3 +1,8 @@
+# 2.0.0
+- Redesign native extension codes.
+- Change not ot use git submodule for LIBSVM codes bundle.
+- Introduce conventional commits.
+
 # 1.1.2
 - Remove dependent gem's type declaration file from installation files.
 
