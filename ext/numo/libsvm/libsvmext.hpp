@@ -323,8 +323,8 @@ LibSvmProblem* convertDatasetToLibSvmProblem(VALUE x_val, VALUE y_val) {
   GetNArray(x_val, x_nary);
   const int n_samples = (int)NA_SHAPE(x_nary)[0];
   const int n_features = (int)NA_SHAPE(x_nary)[1];
-  const double* const x_pt = (double*)na_get_pointer_for_read(x_val);
-  const double* const y_pt = (double*)na_get_pointer_for_read(y_val);
+  const double* const x_ptr = (double*)na_get_pointer_for_read(x_val);
+  const double* const y_ptr = (double*)na_get_pointer_for_read(y_val);
 
   LibSvmProblem* problem = ALLOC(LibSvmProblem);
   problem->l = n_samples;
@@ -336,7 +336,7 @@ LibSvmProblem* convertDatasetToLibSvmProblem(VALUE x_val, VALUE y_val) {
   for (int i = 0; i < n_samples; i++) {
     int n_nonzero_features = 0;
     for (int j = 0; j < n_features; j++) {
-      if (x_pt[i * n_features + j] != 0.0) {
+      if (x_ptr[i * n_features + j] != 0.0) {
         n_nonzero_features += 1;
         last_feature_id = j + 1;
       }
@@ -348,9 +348,9 @@ LibSvmProblem* convertDatasetToLibSvmProblem(VALUE x_val, VALUE y_val) {
       problem->x[i] = ALLOC_N(LibSvmNode, n_nonzero_features + 2);
     }
     for (int j = 0, k = 0; j < n_features; j++) {
-      if (x_pt[i * n_features + j] != 0.0) {
+      if (x_ptr[i * n_features + j] != 0.0) {
         problem->x[i][k].index = j + 1;
-        problem->x[i][k].value = (double)x_pt[i * n_features + j];
+        problem->x[i][k].value = x_ptr[i * n_features + j];
         k++;
       }
     }
@@ -363,7 +363,7 @@ LibSvmProblem* convertDatasetToLibSvmProblem(VALUE x_val, VALUE y_val) {
       problem->x[i][n_nonzero_features + 1].index = -1;
       problem->x[i][n_nonzero_features + 1].value = 0.0;
     }
-    problem->y[i] = y_pt[i];
+    problem->y[i] = y_ptr[i];
   }
 
   RB_GC_GUARD(x_val);
@@ -575,11 +575,11 @@ static VALUE numo_libsvm_predict(VALUE self, VALUE x_val, VALUE param_hash, VALU
   const int n_features = (int)NA_SHAPE(x_nary)[1];
   size_t y_shape[1] = {(size_t)n_samples};
   VALUE y_val = rb_narray_new(numo_cDFloat, 1, y_shape);
-  double* y_pt = (double*)na_get_pointer_for_write(y_val);
-  const double* const x_pt = (double*)na_get_pointer_for_read(x_val);
+  double* y_ptr = (double*)na_get_pointer_for_write(y_val);
+  const double* const x_ptr = (double*)na_get_pointer_for_read(x_val);
   for (int i = 0; i < n_samples; i++) {
-    LibSvmNode* x_nodes = convertVectorXdToLibSvmNode(&x_pt[i * n_features], n_features);
-    y_pt[i] = svm_predict(model, x_nodes);
+    LibSvmNode* x_nodes = convertVectorXdToLibSvmNode(&x_ptr[i * n_features], n_features);
+    y_ptr[i] = svm_predict(model, x_nodes);
     xfree(x_nodes);
   }
 
@@ -612,12 +612,12 @@ static VALUE numo_libsvm_decision_function(VALUE self, VALUE x_val, VALUE param_
   size_t y_shape[2] = {(size_t)n_samples, (size_t)y_cols};
   const int n_dims = isSignleOutputModel(model) ? 1 : 2;
   VALUE y_val = rb_narray_new(numo_cDFloat, n_dims, y_shape);
-  const double* const x_pt = (double*)na_get_pointer_for_read(x_val);
-  double* y_pt = (double*)na_get_pointer_for_write(y_val);
+  const double* const x_ptr = (double*)na_get_pointer_for_read(x_val);
+  double* y_ptr = (double*)na_get_pointer_for_write(y_val);
 
   for (int i = 0; i < n_samples; i++) {
-    LibSvmNode* x_nodes = convertVectorXdToLibSvmNode(&x_pt[i * n_features], n_features);
-    svm_predict_values(model, x_nodes, &y_pt[i * y_cols]);
+    LibSvmNode* x_nodes = convertVectorXdToLibSvmNode(&x_ptr[i * n_features], n_features);
+    svm_predict_values(model, x_nodes, &y_ptr[i * y_cols]);
     xfree(x_nodes);
   }
 
@@ -654,11 +654,11 @@ static VALUE numo_libsvm_predict_proba(VALUE self, VALUE x_val, VALUE param_hash
   const int n_features = (int)NA_SHAPE(x_nary)[1];
   size_t y_shape[2] = {(size_t)n_samples, (size_t)(model->nr_class)};
   VALUE y_val = rb_narray_new(numo_cDFloat, 2, y_shape);
-  const double* const x_pt = (double*)na_get_pointer_for_read(x_val);
-  double* y_pt = (double*)na_get_pointer_for_write(y_val);
+  const double* const x_ptr = (double*)na_get_pointer_for_read(x_val);
+  double* y_ptr = (double*)na_get_pointer_for_write(y_val);
   for (int i = 0; i < n_samples; i++) {
-    LibSvmNode* x_nodes = convertVectorXdToLibSvmNode(&x_pt[i * n_features], n_features);
-    svm_predict_probability(model, x_nodes, &y_pt[i * model->nr_class]);
+    LibSvmNode* x_nodes = convertVectorXdToLibSvmNode(&x_ptr[i * n_features], n_features);
+    svm_predict_probability(model, x_nodes, &y_ptr[i * model->nr_class]);
     xfree(x_nodes);
   }
 
