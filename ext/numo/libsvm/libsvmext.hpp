@@ -103,7 +103,7 @@ VALUE convertMatrixXdToNArray(const double* const* mat, const int n_rows, const 
   return mat_val;
 }
 
-double** convertNArrayToMatixXd(VALUE mat_val) {
+double** convertNArrayToMatrixXd(VALUE mat_val) {
   if (NIL_P(mat_val)) return NULL;
 
   narray_t* mat_nary;
@@ -208,7 +208,7 @@ LibSvmModel* convertHashToLibSvmModel(VALUE model_hash) {
   el = rb_hash_aref(model_hash, ID2SYM(rb_intern("SV")));
   model->SV = convertNArrayToLibSvmNode(el);
   el = rb_hash_aref(model_hash, ID2SYM(rb_intern("sv_coef")));
-  model->sv_coef = convertNArrayToMatixXd(el);
+  model->sv_coef = convertNArrayToMatrixXd(el);
   el = rb_hash_aref(model_hash, ID2SYM(rb_intern("rho")));
   model->rho = convertNArrayToVectorXd(el);
   el = rb_hash_aref(model_hash, ID2SYM(rb_intern("probA")));
