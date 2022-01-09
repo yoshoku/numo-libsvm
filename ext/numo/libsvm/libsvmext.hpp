@@ -381,7 +381,7 @@ bool isProbabilisticModel(LibSvmModel* model) {
   return ((model->param.svm_type == C_SVC || model->param.svm_type == NU_SVC) && model->probA != NULL && model->probB != NULL);
 }
 
-void xfreeLibSvmModel(LibSvmModel* model) {
+void deleteLibSvmModel(LibSvmModel* model) {
   if (model) {
     if (model->SV) {
       for (int i = 0; i < model->l; i++) xfree(model->SV[i]);
@@ -410,7 +410,7 @@ void xfreeLibSvmModel(LibSvmModel* model) {
   }
 }
 
-void xfreeLibSvmParameter(LibSvmParameter* param) {
+void deleteLibSvmParameter(LibSvmParameter* param) {
   if (param) {
     if (param->weight_label) {
       xfree(param->weight_label);
@@ -425,7 +425,7 @@ void xfreeLibSvmParameter(LibSvmParameter* param) {
   }
 }
 
-void xfreeLibSvmProblem(LibSvmProblem* problem) {
+void deleteLibSvmProblem(LibSvmProblem* problem) {
   if (problem) {
     if (problem->x) {
       for (int i = 0; i < problem->l; i++) {
@@ -478,8 +478,8 @@ static VALUE numo_libsvm_train(VALUE self, VALUE x_val, VALUE y_val, VALUE param
 
   const char* err_msg = svm_check_parameter(problem, param);
   if (err_msg) {
-    xfreeLibSvmProblem(problem);
-    xfreeLibSvmParameter(param);
+    deleteLibSvmProblem(problem);
+    deleteLibSvmParameter(param);
     rb_raise(rb_eArgError, "Invalid LIBSVM parameter is given: %s", err_msg);
     return Qnil;
   }
@@ -491,8 +491,8 @@ static VALUE numo_libsvm_train(VALUE self, VALUE x_val, VALUE y_val, VALUE param
   VALUE model_hash = convertLibSvmModelToHash(model);
   svm_free_and_destroy_model(&model);
 
-  xfreeLibSvmProblem(problem);
-  xfreeLibSvmParameter(param);
+  deleteLibSvmProblem(problem);
+  deleteLibSvmParameter(param);
 
   RB_GC_GUARD(x_val);
   RB_GC_GUARD(y_val);
@@ -531,8 +531,8 @@ static VALUE numo_libsvm_cross_validation(VALUE self, VALUE x_val, VALUE y_val, 
 
   const char* err_msg = svm_check_parameter(problem, param);
   if (err_msg) {
-    xfreeLibSvmProblem(problem);
-    xfreeLibSvmParameter(param);
+    deleteLibSvmProblem(problem);
+    deleteLibSvmParameter(param);
     rb_raise(rb_eArgError, "Invalid LIBSVM parameter is given: %s", err_msg);
     return Qnil;
   }
@@ -547,8 +547,8 @@ static VALUE numo_libsvm_cross_validation(VALUE self, VALUE x_val, VALUE y_val, 
   const int n_folds = NUM2INT(nr_folds);
   svm_cross_validation(problem, param, n_folds, t_pt);
 
-  xfreeLibSvmProblem(problem);
-  xfreeLibSvmParameter(param);
+  deleteLibSvmProblem(problem);
+  deleteLibSvmParameter(param);
 
   RB_GC_GUARD(x_val);
   RB_GC_GUARD(y_val);
@@ -583,8 +583,8 @@ static VALUE numo_libsvm_predict(VALUE self, VALUE x_val, VALUE param_hash, VALU
     xfree(x_nodes);
   }
 
-  xfreeLibSvmModel(model);
-  xfreeLibSvmParameter(param);
+  deleteLibSvmModel(model);
+  deleteLibSvmParameter(param);
 
   RB_GC_GUARD(x_val);
 
@@ -621,8 +621,8 @@ static VALUE numo_libsvm_decision_function(VALUE self, VALUE x_val, VALUE param_
     xfree(x_nodes);
   }
 
-  xfreeLibSvmModel(model);
-  xfreeLibSvmParameter(param);
+  deleteLibSvmModel(model);
+  deleteLibSvmParameter(param);
 
   RB_GC_GUARD(x_val);
 
@@ -642,8 +642,8 @@ static VALUE numo_libsvm_predict_proba(VALUE self, VALUE x_val, VALUE param_hash
   model->param = *param;
 
   if (!isProbabilisticModel(model)) {
-    xfreeLibSvmModel(model);
-    xfreeLibSvmParameter(param);
+    deleteLibSvmModel(model);
+    deleteLibSvmParameter(param);
     return Qnil;
   }
 
@@ -662,8 +662,8 @@ static VALUE numo_libsvm_predict_proba(VALUE self, VALUE x_val, VALUE param_hash
     xfree(x_nodes);
   }
 
-  xfreeLibSvmModel(model);
-  xfreeLibSvmParameter(param);
+  deleteLibSvmModel(model);
+  deleteLibSvmParameter(param);
 
   RB_GC_GUARD(x_val);
 
@@ -699,8 +699,8 @@ static VALUE numo_libsvm_save_model(VALUE self, VALUE filename, VALUE param_hash
   const char* const filename_ = StringValuePtr(filename);
   const int res = svm_save_model(filename_, model);
 
-  xfreeLibSvmModel(model);
-  xfreeLibSvmParameter(param);
+  deleteLibSvmModel(model);
+  deleteLibSvmParameter(param);
 
   if (res < 0) {
     rb_raise(rb_eIOError, "Failed to save file '%s'", filename_);
