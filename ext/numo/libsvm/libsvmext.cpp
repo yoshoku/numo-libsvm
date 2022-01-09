@@ -197,7 +197,9 @@ extern "C" void Init_libsvmext(void) {
   /**
    * Load the SVM parameters and model from a text file with LIBSVM format.
    *
-   * @param filename [String] The path to a file to load.
+   * @overload load_svm_model(filename) -> Array
+   *   @param filename [String] The path to a file to load.
+   *
    * @raise [IOError] This error raises when failed to load the model file.
    * @return [Array] Array contains the SVM parameters and model.
    */
