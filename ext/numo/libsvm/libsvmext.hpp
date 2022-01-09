@@ -76,7 +76,7 @@ VALUE convertVectorXdToNArray(const double* const arr, const int size) {
   size_t shape[1] = {(size_t)size};
   VALUE vec_val = rb_narray_new(numo_cDFloat, 1, shape);
   double* vec_ptr = (double*)na_get_pointer_for_write(vec_val);
-  for (int i = 0; i < size; i++) vec_ptr[i] = arr[i];
+  memcpy(vec_ptr, arr, size * sizeof(double));
   return vec_val;
 }
 
