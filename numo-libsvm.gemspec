@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'numo/libsvm/version'
@@ -12,7 +14,7 @@ Gem::Specification.new do |spec|
     Numo::Libsvm is a Ruby gem binding to the LIBSVM library.
     Numo::Libsvm makes to use the LIBSVM functions with dataset represented by Numo::NArray.
   MSG
-  spec.description   = <<~MSG
+  spec.description = <<~MSG
     Numo::Libsvm is a Ruby gem binding to the LIBSVM library.
     LIBSVM is one of the famous libraries that implemented Support Vector Machines,
     and provides functions for support vector classifier, regression, and distribution estimation.
@@ -25,7 +27,7 @@ Gem::Specification.new do |spec|
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features|sig-deps)/}) }
-                                  .select { |f| f.match(/\.(?:rb|rbs|h|hpp|cpp|md|txt)$/) }
+                     .select { |f| f.match(/\.(?:rb|rbs|h|hpp|cpp|md|txt)$/) }
   end
   spec.files << 'ext/numo/libsvm/src/COPYRIGHT'
 
@@ -37,7 +39,8 @@ Gem::Specification.new do |spec|
   spec.metadata      = {
     'homepage_uri' => 'https://github.com/yoshoku/numo-libsvm',
     'source_code_uri' => 'https://github.com/yoshoku/numo-libsvm',
-    'documentation_uri' => 'https://yoshoku.github.io/numo-libsvm/doc/'
+    'documentation_uri' => 'https://yoshoku.github.io/numo-libsvm/doc/',
+    'rubygems_mfa_required' => 'true'
   }
 
   spec.add_runtime_dependency 'numo-narray', '>= 0.9.1'
