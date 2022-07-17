@@ -14,7 +14,7 @@ end
 def r2_score(y_true, y_pred)
   numerator = ((y_true - y_pred)**2).sum
   denominator = ((y_true - y_true.mean)**2).sum
-  denominator.zero? ? 0.0 : 1.0 - numerator / denominator
+  denominator.zero? ? 0.0 : 1.0 - (numerator / denominator)
 end
 
 RSpec.configure do |config|
