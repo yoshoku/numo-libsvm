@@ -1,3 +1,7 @@
+# 2.0.1
+- Chnage to use memcpy to copy vector.
+- Refactor codes and configs with RuboCop.
+
 # 2.0.0
 - Redesign native extension codes.
 - Change not ot use git submodule for LIBSVM codes bundle.
