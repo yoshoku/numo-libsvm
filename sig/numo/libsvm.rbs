@@ -27,6 +27,7 @@ module Numo
       rho: Numo::DFloat,
       probA: Numo::DFloat,
       probB: Numo::DFloat,
+      prob_density_marks: Numo::DFloat,
       sv_indices: Numo::Int32,
       label: Numo::Int32,
       nSV: Numo::Int32,
