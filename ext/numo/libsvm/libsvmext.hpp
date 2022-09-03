@@ -48,6 +48,8 @@ typedef struct svm_problem LibSvmProblem;
 
 void printNull(const char* s) {}
 
+#define NR_MARKS 10
+
 /** CONVERTERS */
 VALUE convertVectorXiToNArray(const int* const arr, const int size) {
   size_t shape[1] = {(size_t)size};
@@ -215,6 +217,8 @@ LibSvmModel* convertHashToLibSvmModel(VALUE model_hash) {
   model->probA = convertNArrayToVectorXd(el);
   el = rb_hash_aref(model_hash, ID2SYM(rb_intern("probB")));
   model->probB = convertNArrayToVectorXd(el);
+  el = rb_hash_aref(model_hash, ID2SYM(rb_intern("prob_density_marks")));
+  model->prob_density_marks = convertNArrayToVectorXd(el);
   el = rb_hash_aref(model_hash, ID2SYM(rb_intern("sv_indices")));
   model->sv_indices = convertNArrayToVectorXi(el);
   el = rb_hash_aref(model_hash, ID2SYM(rb_intern("label")));
@@ -234,6 +238,7 @@ VALUE convertLibSvmModelToHash(const LibSvmModel* const model) {
   VALUE intercepts = model->rho ? convertVectorXdToNArray(model->rho, n_classes * (n_classes - 1) / 2) : Qnil;
   VALUE prob_alpha = model->probA ? convertVectorXdToNArray(model->probA, n_classes * (n_classes - 1) / 2) : Qnil;
   VALUE prob_beta = model->probB ? convertVectorXdToNArray(model->probB, n_classes * (n_classes - 1) / 2) : Qnil;
+  VALUE prob_density_marks = model->prob_density_marks ? convertVectorXdToNArray(model->prob_density_marks, NR_MARKS) : Qnil;
   VALUE sv_indices = model->sv_indices ? convertVectorXiToNArray(model->sv_indices, n_support_vecs) : Qnil;
   VALUE labels = model->label ? convertVectorXiToNArray(model->label, n_classes) : Qnil;
   VALUE n_support_vecs_each_class = model->nSV ? convertVectorXiToNArray(model->nSV, n_classes) : Qnil;
@@ -245,6 +250,7 @@ VALUE convertLibSvmModelToHash(const LibSvmModel* const model) {
   rb_hash_aset(model_hash, ID2SYM(rb_intern("rho")), intercepts);
   rb_hash_aset(model_hash, ID2SYM(rb_intern("probA")), prob_alpha);
   rb_hash_aset(model_hash, ID2SYM(rb_intern("probB")), prob_beta);
+  rb_hash_aset(model_hash, ID2SYM(rb_intern("prob_density_marks")), prob_density_marks);
   rb_hash_aset(model_hash, ID2SYM(rb_intern("sv_indices")), sv_indices);
   rb_hash_aset(model_hash, ID2SYM(rb_intern("label")), labels);
   rb_hash_aset(model_hash, ID2SYM(rb_intern("nSV")), n_support_vecs_each_class);
@@ -377,9 +383,7 @@ bool isSignleOutputModel(LibSvmModel* model) {
   return (model->param.svm_type == ONE_CLASS || model->param.svm_type == EPSILON_SVR || model->param.svm_type == NU_SVR);
 }
 
-bool isProbabilisticModel(LibSvmModel* model) {
-  return ((model->param.svm_type == C_SVC || model->param.svm_type == NU_SVC) && model->probA != NULL && model->probB != NULL);
-}
+bool isProbabilisticModel(LibSvmModel* model) { return svm_check_probability_model(model) != 0; }
 
 void deleteLibSvmModel(LibSvmModel* model) {
   if (model) {
@@ -399,6 +403,8 @@ void deleteLibSvmModel(LibSvmModel* model) {
     model->probA = NULL;
     xfree(model->probB);
     model->probB = NULL;
+    xfree(model->prob_density_marks);
+    model->prob_density_marks = NULL;
     xfree(model->sv_indices);
     model->sv_indices = NULL;
     xfree(model->label);

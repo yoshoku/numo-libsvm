@@ -171,19 +171,22 @@ RSpec.describe Numo::Libsvm do
 
   describe 'distribution estimation' do
     let(:dataset) { Marshal.load(File.read("#{__dir__}/../diabetes.dat")) }
-    let(:pos_id) { dataset[1].eq(1).where }
-    let(:neg_id) { dataset[1].ne(1).where }
-    let(:x_pos) { dataset[0][pos_id, true] }
-    let(:y_pos) { dataset[1][pos_id] }
-    let(:x_neg) { dataset[0][neg_id, true] }
-    let(:y_neg) { dataset[1][neg_id] }
+    let(:x) { dataset[0] }
+    let(:y) { dataset[1] }
+    let(:pos_id) { y.eq(1).where }
+    let(:neg_id) { y.ne(1).where }
+    let(:x_pos) { x[pos_id, true] }
+    let(:y_pos) { y[pos_id] }
+    let(:x_neg) { x[neg_id, true] }
+    let(:y_neg) { y[neg_id] }
     let(:n_test_samples) { x_neg.shape[0] }
     let(:oc_svm_model) { described_class.train(x_pos, y_pos, oc_svm_param) }
     let(:oc_svm_param) do
       { svm_type: Numo::Libsvm::SvmType::ONE_CLASS,
         kernel_type: Numo::Libsvm::KernelType::RBF,
         gamma: 1.0,
-        nu: 0.5 }
+        nu: 0.5,
+        probability: true }
     end
 
     it 'calculates decision function with one-class SVM', :aggregate_failures do
@@ -200,6 +203,14 @@ RSpec.describe Numo::Libsvm do
       expect(pr.shape[0]).to eq(n_test_samples)
       expect(pr.shape[1]).to be_nil
       expect(accuracy(y_neg, pr)).to be >= 0.9
+    end
+
+    it 'predicts probabilities with one-class SVM', :aggregate_failures do
+      prb = described_class.predict_proba(x, oc_svm_param, oc_svm_model)
+      expect(prb.class).to eq(Numo::DFloat)
+      expect(prb.ndim).to eq(2)
+      expect(prb.shape[0]).to eq(x.shape[0])
+      expect(prb.shape[1]).to eq(2)
     end
   end
 
