@@ -1,3 +1,7 @@
+# 2.1.0
+- Update bundled LIBSVM to 3.30.
+- Support for probilistic outputs of one-class SVM.
+
 # 2.0.1
 - Chnage to use memcpy to copy vector.
 - Refactor codes and configs with RuboCop.
