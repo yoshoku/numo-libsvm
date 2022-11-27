@@ -1,3 +1,6 @@
+# 2.1.1
+- Fix build failure with Xcode 14 and Ruby 3.1.x.
+
 # 2.1.0
 - Update bundled LIBSVM to 3.30.
 - Support for probilistic outputs of one-class SVM.
