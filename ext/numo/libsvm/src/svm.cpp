@@ -8,6 +8,10 @@
 #include <limits.h>
 #include <locale.h>
 #include "svm.h"
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 int libsvm_version = LIBSVM_VERSION;
 typedef float Qfloat;
 typedef signed char schar;
@@ -1282,6 +1286,9 @@ public:
 		int start, j;
 		if((start = cache->get_data(i,&data,len)) < len)
 		{
+#ifdef _OPENMP
+#pragma omp parallel for private(j) schedule(guided)
+#endif
 			for(j=start;j<len;j++)
 				data[j] = (Qfloat)(y[i]*y[j]*(this->*kernel_function)(i,j));
 		}
@@ -1397,6 +1404,9 @@ public:
 		int j, real_i = index[i];
 		if(cache->get_data(real_i,&data,l) < l)
 		{
+#ifdef _OPENMP
+#pragma omp parallel for private(j) schedule(guided)
+#endif
 			for(j=0;j<l;j++)
 				data[j] = (Qfloat)(this->*kernel_function)(real_i,j);
 		}
@@ -2219,11 +2229,9 @@ svm_model *svm_train(const svm_problem *prob, const svm_parameter *param)
 			double *prob_density_marks = Malloc(double,nr_marks);
 
 			if(svm_one_class_probability(prob,model,prob_density_marks) == 0)
-			{
-				model->prob_density_marks = Malloc(double,nr_marks);
-				for(i=0;i<nr_marks;i++)
-					model->prob_density_marks[i] = prob_density_marks[i];
-			}
+				model->prob_density_marks = prob_density_marks;
+			else
+				free(prob_density_marks);
 		}
 
 		free(f.alpha);
@@ -2436,8 +2444,8 @@ void svm_cross_validation(const svm_problem *prob, const svm_parameter *param, i
 	int nr_class;
 	if (nr_fold > l)
 	{
+		fprintf(stderr,"WARNING: # folds (%d) > # data (%d). Will use # folds = # data instead (i.e., leave-one-out cross validation)\n", nr_fold, l);
 		nr_fold = l;
-		fprintf(stderr,"WARNING: # folds > # data. Will use # folds = # data instead (i.e., leave-one-out cross validation)\n");
 	}
 	fold_start = Malloc(int,nr_fold+1);
 	// stratified cv may not give leave-one-out rate
@@ -2598,6 +2606,9 @@ double svm_predict_values(const svm_model *model, const svm_node *x, double* dec
 	{
 		double *sv_coef = model->sv_coef[0];
 		double sum = 0;
+#ifdef _OPENMP
+#pragma omp parallel for private(i) reduction(+:sum) schedule(guided)
+#endif
 		for(i=0;i<model->l;i++)
 			sum += sv_coef[i] * Kernel::k_function(x,model->SV[i],model->param);
 		sum -= model->rho[0];
@@ -2614,6 +2625,9 @@ double svm_predict_values(const svm_model *model, const svm_node *x, double* dec
 		int l = model->l;
 
 		double *kvalue = Malloc(double,l);
+#ifdef _OPENMP
+#pragma omp parallel for private(i) schedule(guided)
+#endif
 		for(i=0;i<l;i++)
 			kvalue[i] = Kernel::k_function(x,model->SV[i],model->param);
 
