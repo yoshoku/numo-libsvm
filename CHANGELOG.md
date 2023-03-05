@@ -1,3 +1,6 @@
+# 2.2.0
+- Update bundled LIBSVM to 3.31.
+
 # 2.1.1
 - Fix build failure with Xcode 14 and Ruby 3.1.x.
 
