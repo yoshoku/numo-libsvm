@@ -22,7 +22,7 @@ RSpec.describe Numo::Libsvm do
   end
 
   describe 'precomputed kernel' do
-    let(:dataset) { Marshal.load(File.read("#{__dir__}/../iris.dat")) }
+    let(:dataset) { Marshal.load(File.binread("#{__dir__}/../iris.dat")) }
     let(:x) do
       k = dataset[0].dot(dataset[0].transpose)
       idx = Numo::Int32.new(k.shape[0]).seq + 1
@@ -64,7 +64,7 @@ RSpec.describe Numo::Libsvm do
   end
 
   describe 'classification' do
-    let(:dataset) { Marshal.load(File.read("#{__dir__}/../iris.dat")) }
+    let(:dataset) { Marshal.load(File.binread("#{__dir__}/../iris.dat")) }
     let(:x) { dataset[0] }
     let(:y) { dataset[1] }
     let(:x_test) { dataset[2] }
@@ -129,7 +129,7 @@ RSpec.describe Numo::Libsvm do
   end
 
   describe 'regression' do
-    let(:dataset) { Marshal.load(File.read("#{__dir__}/../housing.dat")) }
+    let(:dataset) { Marshal.load(File.binread("#{__dir__}/../housing.dat")) }
     let(:x) { dataset[0] }
     let(:y) { dataset[1] }
     let(:x_test) { dataset[2] }
@@ -170,7 +170,7 @@ RSpec.describe Numo::Libsvm do
   end
 
   describe 'distribution estimation' do
-    let(:dataset) { Marshal.load(File.read("#{__dir__}/../diabetes.dat")) }
+    let(:dataset) { Marshal.load(File.binread("#{__dir__}/../diabetes.dat")) }
     let(:x) { dataset[0] }
     let(:y) { dataset[1] }
     let(:pos_id) { y.eq(1).where }
@@ -215,7 +215,7 @@ RSpec.describe Numo::Libsvm do
   end
 
   describe 'errors' do
-    let(:dataset) { Marshal.load(File.read("#{__dir__}/../iris.dat")) }
+    let(:dataset) { Marshal.load(File.binread("#{__dir__}/../iris.dat")) }
     let(:x) { dataset[0] }
     let(:y) { dataset[1] }
     let(:svm_model) { described_class.train(x, y, svm_param) }
