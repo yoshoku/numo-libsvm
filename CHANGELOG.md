@@ -1,3 +1,6 @@
+# 2.3.0
+- Update bundled LIBSVM to 3.35.
+
 # 2.2.0
 - Update bundled LIBSVM to 3.31.
 
