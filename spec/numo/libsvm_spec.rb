@@ -97,7 +97,7 @@ RSpec.describe Numo::Libsvm do
 
     it 'predicts probabilities with C-SVC', :aggregate_failures do
       pb = described_class.predict_proba(x_test, c_svc_param, c_svc_model)
-      pr = Numo::Int32[*(Array.new(n_test_samples) { |n| classes[pb[n, true].max_index] })]
+      pr = Numo::Int32[*Array.new(n_test_samples) { |n| classes[pb[n, true].max_index] }] # rubocop:disable Lint/RedundantSplatExpansion
       expect(pb.class).to eq(Numo::DFloat)
       expect(pb.shape[0]).to eq(n_test_samples)
       expect(pb.shape[1]).to eq(n_classes)
