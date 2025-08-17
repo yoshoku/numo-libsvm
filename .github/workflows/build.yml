@@ -22,10 +22,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Ruby 3.2
+      - name: Set up Ruby 3.4
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2
+          ruby-version: 3.4
           bundler-cache: true
       - name: Build and test with Rake
         run: bundle exec rake
@@ -33,10 +33,10 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Ruby 3.2
+      - name: Set up Ruby 3.4
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2
+          ruby-version: 3.4
           bundler-cache: true
       - name: Build and test with Rake
         run: bundle exec rake
