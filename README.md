@@ -15,6 +15,8 @@ Note: There are other useful Ruby gems binding to LIBSVM:
 [libsvm-ruby-swig](https://github.com/tomz/libsvm-ruby-swig) by Tom Zeng,
 and [jrb-libsvm](https://github.com/andreaseger/jrb-libsvm) by Andreas Eger.
 
+Note: Since v3.0.0, this library uses [Numo::NArray Alternative](https://github.com/yoshoku/numo-narray-alt) instead of Numo::NArray as a dependency.
+
 ## Installation
 Numo::Libsvm bundles LIBSVM. There is no need to install LIBSVM in advance.
 

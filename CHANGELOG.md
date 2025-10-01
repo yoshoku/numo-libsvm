@@ -1,3 +1,9 @@
+# [[3.0.0](https://github.com/yoshoku/numo-libsvm/compare/v2.3.0...v3.0.0)] - 2025-10-01
+
+**Breaking chage**
+
+- Change dependency from numo-narray to [numo-narray-alt](https://github.com/yoshoku/numo-narray-alt).
+
 # 2.3.0
 - Update bundled LIBSVM to 3.35.
 
