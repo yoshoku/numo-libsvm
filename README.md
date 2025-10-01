@@ -3,7 +3,7 @@
 [![Build Status](https://github.com/yoshoku/numo-libsvm/workflows/build/badge.svg)](https://github.com/yoshoku/numo-libsvm/actions?query=workflow%3Abuild)
 [![Gem Version](https://badge.fury.io/rb/numo-libsvm.svg)](https://badge.fury.io/rb/numo-libsvm)
 [![BSD 3-Clause License](https://img.shields.io/badge/License-BSD%203--Clause-orange.svg)](https://github.com/yoshoku/numo-libsvm/blob/main/LICENSE.txt)
-[![Documentation](https://img.shields.io/badge/api-reference-blue.svg)](https://yoshoku.github.io/numo-libsvm/doc/)
+[![Documentation](https://img.shields.io/badge/api-reference-blue.svg)](https://gemdocs.org/gems/numo-libsvm/)
 
 Numo::Libsvm is a Ruby gem binding to the [LIBSVM](https://github.com/cjlin1/libsvm) library.
 LIBSVM is one of the famous libraries that implemented Support Vector Machines,
