@@ -1,5 +1,5 @@
 require 'mkmf'
-require 'numo/narray'
+require 'numo/narray/alt'
 
 $LOAD_PATH.each do |lp|
   if File.exist?(File.join(lp, 'numo/numo/narray.h'))
@@ -12,8 +12,8 @@ abort 'numo/narray.h not found.' unless have_header('numo/narray.h')
 
 if RUBY_PLATFORM =~ /mswin|cygwin|mingw/
   $LOAD_PATH.each do |lp|
-    if File.exist?(File.join(lp, 'numo/libnarray.a'))
-      $LDFLAGS = "-L#{lp}/numo #{$LDFLAGS}"
+    if File.exist?(File.join(lp, 'numo/narray/libnarray.a'))
+      $LDFLAGS = "-L#{lp}/numo/narray #{$LDFLAGS}"
       break
     end
   end
