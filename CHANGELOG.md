@@ -1,3 +1,8 @@
+# [[3.0.1](https://github.com/yoshoku/numo-libsvm/compare/v3.0.0...v3.0.1)] - 2025-11-19
+
+- Set the required version of numo-narray-alt to 0.9.10 or higher.
+- Change require statement to explicitly load numo/narray/alt.
+
 # [[3.0.0](https://github.com/yoshoku/numo-libsvm/compare/v2.3.0...v3.0.0)] - 2025-10-01
 
 **Breaking chage**
