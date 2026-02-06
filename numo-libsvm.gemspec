@@ -44,5 +44,5 @@ Gem::Specification.new do |spec|
     'rubygems_mfa_required' => 'true'
   }
 
-  spec.add_dependency 'numo-narray-alt', '~> 0.9.10'
+  spec.add_dependency 'numo-narray-alt', '>= 0.9.10', '< 0.11.0'
 end
