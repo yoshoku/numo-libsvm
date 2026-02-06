@@ -1,3 +1,7 @@
+# [[3.1.0](https://github.com/yoshoku/numo-libsvm/compare/v3.0.1...v3.1.0)] - 2026-02-06
+
+- relax numo-narray-alt version constraint to >= 0.9.10, < 0.11.0.
+
 # [[3.0.1](https://github.com/yoshoku/numo-libsvm/compare/v3.0.0...v3.0.1)] - 2025-11-19
 
 - Set the required version of numo-narray-alt to 0.9.10 or higher.
