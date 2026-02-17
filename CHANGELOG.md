@@ -1,6 +1,10 @@
+# [[3.1.1](https://github.com/yoshoku/numo-libsvm/compare/v3.1.0...v3.1.1)] - 2026-02-17
+
+- Remove unnecessary C++ shared library loading check from native extensions build step.
+
 # [[3.1.0](https://github.com/yoshoku/numo-libsvm/compare/v3.0.1...v3.1.0)] - 2026-02-06
 
-- relax numo-narray-alt version constraint to >= 0.9.10, < 0.11.0.
+- Relax numo-narray-alt version constraint to >= 0.9.10, < 0.11.0.
 
 # [[3.0.1](https://github.com/yoshoku/numo-libsvm/compare/v3.0.0...v3.0.1)] - 2025-11-19
 
@@ -9,7 +13,7 @@
 
 # [[3.0.0](https://github.com/yoshoku/numo-libsvm/compare/v2.3.0...v3.0.0)] - 2025-10-01
 
-**Breaking chage**
+**Breaking change**
 
 - Change dependency from numo-narray to [numo-narray-alt](https://github.com/yoshoku/numo-narray-alt).
 
