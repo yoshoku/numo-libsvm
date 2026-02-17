@@ -26,19 +26,6 @@ if RUBY_PLATFORM.match?(/darwin/) && Gem::Version.new('3.1.0') <= Gem::Version.n
   end
 end
 
-have_libcpp = false
-if RUBY_PLATFORM.include?('darwin')
-  if have_library('c++')
-    have_libcpp = true
-  else
-    warn 'libc++ is not found.'
-  end
-end
-
-if !have_libcpp && !RUBY_PLATFORM.include?('mswin')
-  warn 'libstdc++ is not found.' unless have_library('stdc++')
-end
-
 $srcs = Dir.glob("#{$srcdir}/**/*.cpp").map { |path| File.basename(path) }
 $INCFLAGS << " -I$(srcdir)/src"
 $VPATH << "$(srcdir)/src"
