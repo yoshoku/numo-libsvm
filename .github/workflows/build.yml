@@ -31,14 +31,9 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.4
-      - name: Install numo-narray
-        run: |
-          gem install specific_install
-          gem specific_install -l "https://github.com/ruby-numo/numo-narray.git"
+          bundler-cache: true
       - name: Build and test with Rake
-        run: |
-          bundle install
-          bundle exec rake
+        run: bundle exec rake
   build-mac:
     runs-on: macos-latest
     steps:
