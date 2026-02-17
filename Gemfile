@@ -15,3 +15,7 @@ gem 'rubocop-rake', '~> 0.6'
 gem 'rubocop-rspec', '~> 3.6'
 gem 'steep', '~> 0.44'
 gem 'yard', '~> 0.9.28'
+
+group :memcheck, optional: true do
+  gem 'ruby_memcheck', '~> 3.0'
+end
