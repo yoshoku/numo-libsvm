@@ -1,3 +1,7 @@
+# [[3.2.0](https://github.com/yoshoku/numo-libsvm/compare/v3.1.1...v3.2.0)] - 2026-07-05
+
+- Relax numo-narray-alt upper bound to < 0.12.0.
+
 # [[3.1.1](https://github.com/yoshoku/numo-libsvm/compare/v3.1.0...v3.1.1)] - 2026-02-17
 
 - Remove unnecessary C++ shared library loading check from native extensions build step.
